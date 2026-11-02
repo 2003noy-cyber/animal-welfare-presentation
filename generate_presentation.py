@@ -1,15 +1,341 @@
 """
 Presentation Generator Script: Companion Animal Welfare, Nutrition & Cognitive Enrichment
 (Canines, Felines & Lagomorphs)
-Refined Warm Organic & Earth-Toned Aesthetic with Botanical Three.js Constellation
+Enhanced with animated SVG animal illustrations, species silhouettes, and floating vector motifs.
 """
 
 import sys
 from pathlib import Path
 
 
+def get_illustrations() -> dict[str, str]:
+    """Returns elegant, animated vector SVG illustrations for companion animal welfare."""
+
+    # 1. Holistic Welfare Triad Harmony
+    svg_trio_harmony = """
+    <div class="anim-svg-wrap float-anim">
+        <svg viewBox="0 0 420 140" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+            <defs>
+                <linearGradient id="warmGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#e0a96d"/>
+                    <stop offset="50%" stop-color="#d97736"/>
+                    <stop offset="100%" stop-color="#87a987"/>
+                </linearGradient>
+            </defs>
+            <!-- Outer delicate wreath circle -->
+            <ellipse cx="210" cy="70" rx="195" ry="62" stroke="rgba(214, 180, 150, 0.2)" stroke-width="1.5" stroke-dasharray="4 6"/>
+            <!-- Dog Silhouette (Left) -->
+            <path d="M75 105 C70 90, 75 75, 82 62 C85 55, 82 45, 80 38 C84 37, 90 41, 93 47 C98 42, 108 40, 116 46 C124 53, 128 65, 126 78 C124 88, 129 97, 134 105 Z" 
+                  fill="rgba(224, 169, 109, 0.15)" stroke="#e0a96d" stroke-width="2.2" stroke-linejoin="round" class="pulse-path"/>
+            <circle cx="106" cy="54" r="2.5" fill="#fdfbf7"/>
+            <path d="M120 62 C126 66, 130 68, 134 67" stroke="#e0a96d" stroke-width="2" stroke-linecap="round"/>
+            <!-- Heart-Paw Welfare Emblem (Center) -->
+            <g class="breathe-glow" transform="translate(195, 45)">
+                <path d="M15 28 C5 18, -3 8, 3 2 C9 -4, 15 2, 15 6 C15 2, 21 -4, 27 2 C33 8, 25 18, 15 28 Z" fill="rgba(217, 119, 54, 0.25)" stroke="#d97736" stroke-width="2"/>
+                <!-- Mini Paw inside heart -->
+                <ellipse cx="15" cy="18" rx="3.5" ry="4" fill="#fdfbf7"/>
+                <circle cx="10" cy="11" r="1.5" fill="#e0a96d"/>
+                <circle cx="15" cy="9" r="1.5" fill="#e0a96d"/>
+                <circle cx="20" cy="11" r="1.5" fill="#e0a96d"/>
+            </g>
+            <!-- Cat Silhouette (Center-Right) -->
+            <path d="M260 105 C258 92, 262 80, 268 70 C270 65, 266 50, 264 42 C270 44, 274 50, 276 56 C282 52, 290 52, 295 57 C298 50, 303 44, 308 42 C307 50, 304 62, 306 70 C310 80, 314 92, 312 105 Z" 
+                  fill="rgba(217, 119, 54, 0.15)" stroke="#d97736" stroke-width="2.2" stroke-linejoin="round"/>
+            <circle cx="282" cy="62" r="2" fill="#fdfbf7"/>
+            <path d="M268 72 Q255 74 250 82" stroke="#d97736" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Rabbit Silhouette (Far Right) -->
+            <path d="M345 105 C342 94, 345 84, 350 78 C352 68, 350 42, 348 30 C353 32, 356 46, 356 56 C360 44, 365 32, 370 30 C369 44, 365 60, 367 70 C374 76, 382 86, 380 105 Z" 
+                  fill="rgba(135, 169, 135, 0.15)" stroke="#87a987" stroke-width="2.2" stroke-linejoin="round"/>
+            <circle cx="360" cy="68" r="2" fill="#fdfbf7"/>
+            <ellipse cx="376" cy="100" rx="5" ry="4" fill="#87a987" opacity="0.6"/>
+        </svg>
+    </div>
+    """
+
+    # 2. Species Comparison Profiles
+    svg_species_profiles = """
+    <div class="anim-svg-wrap float-anim">
+        <svg viewBox="0 0 420 115" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+            <!-- Dog Medallion -->
+            <g transform="translate(30, 10)">
+                <circle cx="45" cy="45" r="42" fill="rgba(224, 169, 109, 0.08)" stroke="#e0a96d" stroke-width="1.5" stroke-dasharray="3 4"/>
+                <path d="M30 65 C26 54, 30 42, 38 34 C42 30, 40 22, 38 16 C42 16, 46 20, 48 24 C54 20, 62 20, 68 26 C72 32, 74 42, 70 52 C68 58, 72 65, 76 70 Z" 
+                      fill="rgba(224, 169, 109, 0.2)" stroke="#e0a96d" stroke-width="2"/>
+                <circle cx="56" cy="30" r="2.2" fill="#fdfbf7"/>
+                <text x="45" y="100" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#e0a96d" letter-spacing="1">CANINE</text>
+            </g>
+            <!-- Cat Medallion -->
+            <g transform="translate(165, 10)">
+                <circle cx="45" cy="45" r="42" fill="rgba(217, 119, 54, 0.08)" stroke="#d97736" stroke-width="1.5" stroke-dasharray="3 4"/>
+                <path d="M32 68 C30 58, 34 48, 38 40 C40 36, 36 24, 34 18 C40 20, 44 26, 46 30 C52 26, 60 26, 64 30 C66 24, 70 18, 76 18 C74 24, 72 34, 74 40 C78 48, 82 58, 80 68 Z" 
+                      fill="rgba(217, 119, 54, 0.2)" stroke="#d97736" stroke-width="2"/>
+                <circle cx="54" cy="36" r="2" fill="#fdfbf7"/>
+                <text x="45" y="100" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#d97736" letter-spacing="1">FELINE</text>
+            </g>
+            <!-- Rabbit Medallion -->
+            <g transform="translate(300, 10)">
+                <circle cx="45" cy="45" r="42" fill="rgba(135, 169, 135, 0.08)" stroke="#87a987" stroke-width="1.5" stroke-dasharray="3 4"/>
+                <path d="M34 68 C32 58, 35 50, 40 44 C42 34, 40 16, 38 6 C42 8, 45 18, 45 26 C48 16, 52 8, 56 6 C55 18, 52 30, 54 38 C60 44, 66 52, 64 68 Z" 
+                      fill="rgba(135, 169, 135, 0.2)" stroke="#87a987" stroke-width="2"/>
+                <circle cx="48" cy="40" r="2" fill="#fdfbf7"/>
+                <text x="45" y="100" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#87a987" letter-spacing="1">LAGOMORPH</text>
+            </g>
+        </svg>
+    </div>
+    """
+
+    # 3. Canine Cognitive Puzzle
+    svg_canine_puzzle = """
+    <div class="anim-svg-wrap float-anim">
+        <svg viewBox="0 0 400 135" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+            <!-- Dog Head reaching towards puzzle -->
+            <path d="M40 95 C35 80, 42 65, 52 50 C58 42, 54 30, 50 20 C56 22, 62 28, 66 36 C74 30, 86 32, 98 40 C110 50, 115 65, 110 80 C106 90, 114 100, 122 108" 
+                  stroke="#e0a96d" stroke-width="2.5" fill="rgba(224, 169, 109, 0.12)" stroke-linecap="round"/>
+            <circle cx="82" cy="48" r="3" fill="#fdfbf7"/>
+            <path d="M98 62 C106 66, 112 68, 118 66" stroke="#d97736" stroke-width="2" stroke-linecap="round"/>
+            <!-- Scent waves -->
+            <path d="M128 60 Q138 52 148 60 T168 60" stroke="#e0a96d" stroke-width="2" stroke-dasharray="3 4" class="scent-wave"/>
+            <path d="M132 72 Q144 65 156 72 T178 72" stroke="#d97736" stroke-width="2" stroke-dasharray="3 4" class="scent-wave"/>
+            <!-- Interactive Round Puzzle Board -->
+            <g transform="translate(230, 18)" class="breathe-glow">
+                <circle cx="50" cy="50" r="48" fill="rgba(32, 28, 25, 0.7)" stroke="#e0a96d" stroke-width="2.5"/>
+                <circle cx="50" cy="50" r="34" fill="rgba(217, 119, 54, 0.15)" stroke="#d97736" stroke-width="1.8"/>
+                <circle cx="50" cy="50" r="16" fill="rgba(135, 169, 135, 0.25)" stroke="#87a987" stroke-width="2"/>
+                <!-- Sliding Pegs -->
+                <circle cx="50" cy="22" r="7" fill="#e0a96d"/>
+                <circle cx="78" cy="50" r="7" fill="#d97736"/>
+                <circle cx="50" cy="78" r="7" fill="#87a987"/>
+                <circle cx="22" cy="50" r="7" fill="#e0a96d"/>
+                <!-- Treat reward inside center -->
+                <polygon points="50,44 54,48 50,56 46,48" fill="#fdfbf7"/>
+            </g>
+        </svg>
+    </div>
+    """
+
+    # 4. Senior Dog Care & Joint Support
+    svg_senior_dog = """
+    <div class="anim-svg-wrap float-anim">
+        <svg viewBox="0 0 400 130" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+            <!-- Orthopedic Bolster Bed Base -->
+            <rect x="50" y="82" width="300" height="34" rx="14" fill="rgba(214, 180, 150, 0.12)" stroke="#e0a96d" stroke-width="1.8"/>
+            <rect x="65" y="74" width="270" height="18" rx="8" fill="rgba(217, 119, 54, 0.15)"/>
+            <!-- Resting Senior Dog Silhouette -->
+            <path d="M90 85 C95 70, 110 65, 135 68 C160 70, 190 64, 220 68 C245 72, 265 65, 275 75 C282 82, 280 88, 270 88 C240 88, 140 88, 90 85 Z" 
+                  fill="rgba(224, 169, 109, 0.22)" stroke="#e0a96d" stroke-width="2"/>
+            <!-- Dog Head resting on paws -->
+            <path d="M260 72 C275 70, 288 74, 292 84 C290 88, 280 90, 270 88" stroke="#e0a96d" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M280 77 Q284 79 288 77" stroke="#fdfbf7" stroke-width="2"/>
+            <!-- Joint Warmth Glow Circles (Shoulder & Hip) -->
+            <circle cx="140" cy="72" r="10" stroke="#d97736" stroke-width="1.8" stroke-dasharray="3 3" class="pulse-path" fill="rgba(217, 119, 54, 0.15)"/>
+            <circle cx="230" cy="72" r="10" stroke="#d97736" stroke-width="1.8" stroke-dasharray="3 3" class="pulse-path" fill="rgba(217, 119, 54, 0.15)"/>
+            <!-- Heart Pulse Vitality Wave -->
+            <path d="M120 30 L160 30 L168 18 L176 42 L184 24 L192 34 L200 30 L280 30" stroke="#d97736" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="pulse-path"/>
+            <circle cx="200" cy="30" r="3" fill="#fdfbf7"/>
+        </svg>
+    </div>
+    """
+
+    # 5. Feline Vertical Territory & Agility
+    svg_feline_climb = """
+    <div class="anim-svg-wrap float-anim">
+        <svg viewBox="0 0 400 135" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+            <!-- Wall Catwalk Shelves -->
+            <rect x="30" y="95" width="90" height="8" rx="4" fill="rgba(214, 180, 150, 0.25)" stroke="#e0a96d" stroke-width="1.5"/>
+            <rect x="155" y="65" width="100" height="8" rx="4" fill="rgba(214, 180, 150, 0.25)" stroke="#e0a96d" stroke-width="1.5"/>
+            <rect x="290" y="35" width="85" height="8" rx="4" fill="rgba(214, 180, 150, 0.25)" stroke="#e0a96d" stroke-width="1.5"/>
+            <!-- Arched Cat Silhouette (Stretching upward toward shelf) -->
+            <path d="M175 64 C172 50, 180 40, 195 38 C210 36, 222 42, 230 52 C236 46, 240 40, 244 38 C245 44, 244 50, 246 54 C250 48, 255 42, 260 42 C259 48, 256 56, 258 64 Z" 
+                  fill="rgba(217, 119, 54, 0.2)" stroke="#d97736" stroke-width="2.2" stroke-linejoin="round"/>
+            <circle cx="248" cy="48" r="2" fill="#fdfbf7"/>
+            <!-- Graceful Upright Cat Tail -->
+            <path d="M175 62 C165 52, 160 38, 168 25 C172 18, 178 20, 175 26 C170 34, 172 44, 180 54" stroke="#d97736" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Feather Wand Toy at upper shelf -->
+            <line x1="310" y1="12" x2="350" y2="28" stroke="#87a987" stroke-width="1.8"/>
+            <path d="M350 28 Q360 25 365 30 Q358 35 350 28" fill="#87a987"/>
+            <path d="M350 28 Q362 34 366 40 Q356 40 350 28" fill="#e0a96d"/>
+        </svg>
+    </div>
+    """
+
+    # 6. Lagomorph Nutrition & Hay Rack
+    svg_rabbit_hay = """
+    <div class="anim-svg-wrap float-anim">
+        <svg viewBox="0 0 400 135" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+            <!-- Wooden Hay Manger (Left) -->
+            <rect x="40" y="25" width="10" height="85" rx="3" fill="#c9ada7"/>
+            <rect x="130" y="25" width="10" height="85" rx="3" fill="#c9ada7"/>
+            <line x1="45" y1="35" x2="135" y2="35" stroke="#e0a96d" stroke-width="3"/>
+            <line x1="45" y1="105" x2="135" y2="105" stroke="#e0a96d" stroke-width="3"/>
+            <!-- Hay Grate Bars -->
+            <line x1="70" y1="35" x2="70" y2="105" stroke="#e0a96d" stroke-width="2.2"/>
+            <line x1="90" y1="35" x2="90" y2="105" stroke="#e0a96d" stroke-width="2.2"/>
+            <line x1="110" y1="35" x2="110" y2="105" stroke="#e0a96d" stroke-width="2.2"/>
+            <!-- Timothy Grass Stems poking out -->
+            <path d="M60 45 Q75 65 145 60" stroke="#87a987" stroke-width="2" stroke-linecap="round"/>
+            <path d="M80 38 Q100 55 150 72" stroke="#87a987" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M95 40 Q115 70 148 85" stroke="#87a987" stroke-width="2" stroke-linecap="round"/>
+            <!-- Detailed Rabbit Silhouette reaching up to nibble -->
+            <g transform="translate(145, 20)">
+                <path d="M40 90 C36 78, 42 66, 52 58 C55 45, 52 20, 50 6 C56 8, 60 22, 60 32 C65 20, 72 8, 78 6 C76 22, 72 38, 74 48 C82 56, 92 68, 90 90 Z" 
+                      fill="rgba(135, 169, 135, 0.22)" stroke="#87a987" stroke-width="2.2" stroke-linejoin="round"/>
+                <circle cx="68" cy="50" r="2.2" fill="#fdfbf7"/>
+                <!-- Fluffy Tail -->
+                <circle cx="36" cy="85" r="7" fill="rgba(214, 180, 150, 0.3)" stroke="#87a987" stroke-width="1.8"/>
+            </g>
+            <!-- 85% Grass Hay Badge -->
+            <g transform="translate(275, 45)">
+                <rect width="90" height="34" rx="8" fill="rgba(135, 169, 135, 0.15)" stroke="#87a987" stroke-width="1.5"/>
+                <text x="45" y="21" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#87a987">85%+ FIBER</text>
+            </g>
+        </svg>
+    </div>
+    """
+
+    # 7. Safe Enclosure & Timber Castle
+    svg_timber_habitat = """
+    <div class="anim-svg-wrap float-anim">
+        <svg viewBox="0 0 400 135" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+            <!-- Kiln-Dried Pine Castle Structure -->
+            <rect x="60" y="35" width="220" height="75" rx="6" fill="rgba(224, 169, 109, 0.12)" stroke="#e0a96d" stroke-width="2"/>
+            <!-- Castle Battlements (Crenellations) -->
+            <rect x="60" y="22" width="25" height="15" rx="2" fill="rgba(224, 169, 109, 0.2)" stroke="#e0a96d" stroke-width="1.8"/>
+            <rect x="110" y="22" width="25" height="15" rx="2" fill="rgba(224, 169, 109, 0.2)" stroke="#e0a96d" stroke-width="1.8"/>
+            <rect x="160" y="22" width="25" height="15" rx="2" fill="rgba(224, 169, 109, 0.2)" stroke="#e0a96d" stroke-width="1.8"/>
+            <rect x="210" y="22" width="25" height="15" rx="2" fill="rgba(224, 169, 109, 0.2)" stroke="#e0a96d" stroke-width="1.8"/>
+            <rect x="255" y="22" width="25" height="15" rx="2" fill="rgba(224, 169, 109, 0.2)" stroke="#e0a96d" stroke-width="1.8"/>
+            <!-- Dual Escape Arches (Prey Flight Instinct Safety) -->
+            <path d="M85 110 V70 C85 60, 115 60, 115 70 V110 Z" fill="#121110" stroke="#e0a96d" stroke-width="2"/>
+            <path d="M190 110 V70 C190 60, 220 60, 220 70 V110 Z" fill="#121110" stroke="#e0a96d" stroke-width="2"/>
+            <!-- Applewood Chew Stick Bundle (Right) -->
+            <g transform="translate(305, 45)">
+                <line x1="0" y1="10" x2="55" y2="35" stroke="#d97736" stroke-width="4" stroke-linecap="round"/>
+                <line x1="5" y1="25" x2="60" y2="15" stroke="#e0a96d" stroke-width="4" stroke-linecap="round"/>
+                <line x1="8" y1="40" x2="58" y2="30" stroke="#c9ada7" stroke-width="4" stroke-linecap="round"/>
+                <!-- Natural leaf sprout -->
+                <path d="M55 12 Q65 6 68 14 Q60 18 55 12" fill="#87a987"/>
+                <text x="32" y="62" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="600" fill="#e0a96d">APPLEWOOD</text>
+            </g>
+        </svg>
+    </div>
+    """
+
+    # 8. Behavioral Foraging & Scentwork
+    svg_foraging_matrix = """
+    <div class="anim-svg-wrap float-anim">
+        <svg viewBox="0 0 400 135" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+            <!-- Snuffle Mat Texture Layers (Left) -->
+            <g transform="translate(45, 30)">
+                <rect width="110" height="75" rx="8" fill="rgba(32, 28, 25, 0.6)" stroke="#87a987" stroke-width="1.8"/>
+                <!-- Fleece Strip Loops -->
+                <path d="M15 65 C10 45, 25 35, 30 55" stroke="#87a987" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M35 68 C30 40, 48 30, 52 58" stroke="#e0a96d" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M55 70 C50 42, 68 32, 74 60" stroke="#d97736" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M78 68 C74 44, 92 34, 96 62" stroke="#87a987" stroke-width="4.5" stroke-linecap="round"/>
+                <!-- Hidden Kibble / Herb Bits -->
+                <circle cx="32" cy="48" r="3" fill="#fdfbf7"/>
+                <circle cx="72" cy="50" r="3" fill="#fdfbf7"/>
+                <text x="55" y="90" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="600" fill="#87a987">SNUFFLE MAT</text>
+            </g>
+            <!-- Scent Trajectory Curves -->
+            <path d="M175 65 Q200 45 225 65 T275 65" stroke="#e0a96d" stroke-width="2" stroke-dasharray="4 4" class="scent-wave"/>
+            <!-- Dig Box with Dried Flowers (Right) -->
+            <g transform="translate(245, 30)">
+                <polygon points="10,65 95,65 105,25 0,25" fill="rgba(217, 119, 54, 0.12)" stroke="#d97736" stroke-width="1.8"/>
+                <!-- Dandelion & Chamomile Sprigs -->
+                <circle cx="35" cy="22" r="5" fill="#e0a96d"/>
+                <circle cx="55" cy="18" r="6" fill="#fdfbf7"/>
+                <circle cx="75" cy="24" r="5" fill="#87a987"/>
+                <line x1="35" y1="27" x2="35" y2="45" stroke="#87a987" stroke-width="1.8"/>
+                <line x1="55" y1="24" x2="55" y2="45" stroke="#87a987" stroke-width="1.8"/>
+                <line x1="75" y1="29" x2="75" y2="45" stroke="#87a987" stroke-width="1.8"/>
+                <text x="52" y="85" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="600" fill="#d97736">HERBAL DIG TRAY</text>
+            </g>
+        </svg>
+    </div>
+    """
+
+    # 9. Multi-Pet Peaceful Coexistence Barrier
+    svg_safe_coexistence = """
+    <div class="anim-svg-wrap float-anim">
+        <svg viewBox="0 0 400 135" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+            <!-- Relaxed Lying Dog on Left -->
+            <g transform="translate(30, 35)">
+                <path d="M20 70 C30 55, 55 52, 85 55 C100 58, 115 52, 125 65 C130 72, 120 78, 110 75 C80 75, 40 75, 20 70 Z" 
+                      fill="rgba(224, 169, 109, 0.18)" stroke="#e0a96d" stroke-width="2"/>
+                <path d="M115 62 C125 60, 134 65, 136 74" stroke="#e0a96d" stroke-width="2" stroke-linecap="round"/>
+                <text x="75" y="92" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="600" fill="#e0a96d">CALM DOWN-STAY</text>
+            </g>
+            <!-- Double-Grid Baby Gate Barrier (Center) -->
+            <g transform="translate(185, 12)">
+                <rect x="0" y="5" width="26" height="98" rx="3" fill="rgba(214, 180, 150, 0.15)" stroke="#c9ada7" stroke-width="2"/>
+                <line x1="7" y1="10" x2="7" y2="98" stroke="#c9ada7" stroke-width="1.5"/>
+                <line x1="13" y1="10" x2="13" y2="98" stroke="#c9ada7" stroke-width="1.5"/>
+                <line x1="19" y1="10" x2="19" y2="98" stroke="#c9ada7" stroke-width="1.5"/>
+                <!-- Shield Icon -->
+                <circle cx="13" cy="52" r="7" fill="#121110" stroke="#87a987" stroke-width="1.8"/>
+                <path d="M10 52 L12 55 L16 49" stroke="#87a987" stroke-width="1.6" stroke-linecap="round"/>
+            </g>
+            <!-- Protected Rabbit Sanctuary on Right -->
+            <g transform="translate(250, 35)">
+                <rect x="0" y="10" width="115" height="75" rx="8" fill="rgba(135, 169, 135, 0.08)" stroke="#87a987" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <path d="M45 68 C42 58, 45 48, 52 42 C54 32, 50 16, 48 8 C52 10, 56 20, 56 28 C60 18, 65 10, 70 8 C68 20, 66 30, 68 38 C75 44, 82 52, 80 68 Z" 
+                      fill="rgba(135, 169, 135, 0.22)" stroke="#87a987" stroke-width="2"/>
+                <text x="58" y="92" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="600" fill="#87a987">SANCTUARY ZONE</text>
+            </g>
+        </svg>
+    </div>
+    """
+
+    # 10. Lifetime Commitment & Quality of Life
+    svg_lifetime_covenant = """
+    <div class="anim-svg-wrap float-anim">
+        <svg viewBox="0 0 400 135" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+            <!-- Cupped Caring Hands forming a cradle -->
+            <g transform="translate(100, 20)" class="breathe-glow">
+                <!-- Left Hand -->
+                <path d="M30 75 C45 85, 75 90, 100 90 C125 90, 155 85, 170 75 C150 78, 120 80, 100 80 C80 80, 50 78, 30 75 Z" 
+                      fill="rgba(224, 169, 109, 0.3)" stroke="#e0a96d" stroke-width="2"/>
+                <!-- Heart Enclosure -->
+                <path d="M100 68 C80 50, 65 32, 75 18 C85 6, 100 16, 100 24 C100 16, 115 6, 125 18 C135 32, 120 50, 100 68 Z" 
+                      fill="rgba(217, 119, 54, 0.18)" stroke="#d97736" stroke-width="2.2" class="pulse-path"/>
+                <!-- Three Paw Prints Inside Covenant Heart -->
+                <!-- Dog Paw (Center) -->
+                <ellipse cx="100" cy="42" rx="4" ry="5" fill="#fdfbf7"/>
+                <circle cx="94" cy="33" r="1.8" fill="#e0a96d"/>
+                <circle cx="100" cy="30" r="1.8" fill="#e0a96d"/>
+                <circle cx="106" cy="33" r="1.8" fill="#e0a96d"/>
+                <!-- Cat Paw (Left) -->
+                <circle cx="85" cy="38" r="2.5" fill="#d97736"/>
+                <!-- Rabbit Paw (Right) -->
+                <ellipse cx="115" cy="38" rx="2.5" ry="3.5" fill="#87a987"/>
+            </g>
+            <!-- Laurel Sprigs of Stewardship -->
+            <path d="M60 70 Q75 40 90 25" stroke="#87a987" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M340 70 Q325 40 310 25" stroke="#87a987" stroke-width="1.8" stroke-linecap="round"/>
+            <text x="200" y="120" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" fill="#e0a96d" letter-spacing="1.5">GUARDIANSHIP ETHICS</text>
+        </svg>
+    </div>
+    """
+
+    return {
+        "s1": svg_trio_harmony,
+        "s2": svg_species_profiles,
+        "s3": svg_canine_puzzle,
+        "s4": svg_senior_dog,
+        "s5": svg_feline_climb,
+        "s6": svg_rabbit_hay,
+        "s7": svg_timber_habitat,
+        "s8": svg_foraging_matrix,
+        "s9": svg_safe_coexistence,
+        "s10": svg_lifetime_covenant
+    }
+
+
 def build_presentation_html() -> str:
-    """Constructs the complete standalone HTML presentation with warm organic styling."""
+    """Constructs the complete standalone HTML presentation with animated vector animal art."""
+
+    ill = get_illustrations()
 
     slides_data = [
         {
@@ -17,7 +343,7 @@ def build_presentation_html() -> str:
             "badge": "01 // WELFARE SCIENCE",
             "title": "Holistic Companion Animal Care & Welfare",
             "subtitle": "From Basic Survival to Flourishing: Implementing the Modern Five Domains Welfare Model",
-            "content": """
+            "content": f"""
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
@@ -47,9 +373,7 @@ def build_presentation_html() -> str:
                 <div class="col">
                     <div class="card-inner highlight-border">
                         <h3>The Triad of Species-Appropriate Guardianship</h3>
-                        <p class="body-text">
-                            Holistic companion guardianship acknowledges that physiological health, emotional equilibrium, and cognitive fulfillment are deeply intertwined:
-                        </p>
+                        {ill['s1']}
                         <div class="arch-diagram">
                             <div class="arch-box step-1">1. Biological Integrity (Species-Appropriate Nutrition & Vet Care)</div>
                             <div class="arch-arrow">&#10140;</div>
@@ -77,11 +401,12 @@ def build_presentation_html() -> str:
             "badge": "02 // COMPARATIVE BIOLOGY",
             "title": "Species-Specific Needs: Dogs vs. Cats vs. Rabbits",
             "subtitle": "Decoding Divergent Evolutionary Biologies, Dietary Classes, and Social Structures",
-            "content": """
+            "content": f"""
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
                         <h3>Comparative Biological Profiles</h3>
+                        {ill['s2']}
                         <p class="body-text">
                             Applying canine assumptions to felines or treating lagomorphs like small dogs is a frequent root cause of behavioral dysfunction and medical emergencies. Guardians must honor distinct evolutionary paths:
                         </p>
@@ -163,7 +488,7 @@ def build_presentation_html() -> str:
             "badge": "03 // CANINE COGNITION",
             "title": "Canine Cognitive Enrichment & Puzzle Work",
             "subtitle": "Stimulating the Neocortex: Contra-freeloading, Olfactory Processing, and Problem-Solving",
-            "content": """
+            "content": f"""
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
@@ -194,6 +519,7 @@ def build_presentation_html() -> str:
                 <div class="col">
                     <div class="card-inner">
                         <h3>Tiered Puzzle Progression Framework</h3>
+                        {ill['s3']}
                         <div class="funnel-container">
                             <div class="funnel-step f1">
                                 <span class="f-num">LEVEL 1</span>
@@ -235,11 +561,12 @@ def build_presentation_html() -> str:
             "badge": "04 // GERIATRIC CARE",
             "title": "Senior Dog Care: Mobility, Joint Support & Mental Stimulation",
             "subtitle": "Multimodal Arthritis Management, Neuroprotection, and Cognitive Dysfunction Syndrome (CDS)",
-            "content": """
+            "content": f"""
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
                         <h3>Multimodal Osteoarthritis (OA) Management</h3>
+                        {ill['s4']}
                         <p class="body-text">
                             Over 80% of dogs aged 8 and older suffer from chronic degenerative joint disease. Modern veterinary medicine demands a layered, multimodal strategy rather than relying solely on high-dose pharmaceuticals:
                         </p>
@@ -291,11 +618,12 @@ def build_presentation_html() -> str:
             "badge": "05 // FELINE WELFARE",
             "title": "Feline Environmental Enrichment & Territory Dynamics",
             "subtitle": "Architecting 3D Vertical Space, Predatory Motor Sequences, and Stress-Free Resource Hubs",
-            "content": """
+            "content": f"""
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
                         <h3>The 3D Vertical Territory Architecture</h3>
+                        {ill['s5']}
                         <p class="body-text">
                             Domestic cats retain the instinctual wiring of both solitary apex predators and vulnerable mid-tier prey. They do not navigate living spaces in square feet; they calculate territory in <strong>cubic volume</strong>.
                         </p>
@@ -354,11 +682,12 @@ def build_presentation_html() -> str:
             "badge": "06 // LAGOMORPH NUTRITION",
             "title": "Lagomorph Welfare: Delicate Digestive Systems & Hay Diet",
             "subtitle": "Hindgut Fermentation, Continuous Dental Wear, and Gastrointestinal (GI) Stasis Prevention",
-            "content": """
+            "content": f"""
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
                         <h3>The Digestive Mechanics of Cecotrophy</h3>
+                        {ill['s6']}
                         <p class="body-text">
                             Rabbits possess a specialized digestive system: <strong>hindgut cecal fermentation</strong>. Their enormous cecum hosts a sensitive microbial ecosystem that converts cellulose into bioavailable nutrition.
                         </p>
@@ -418,11 +747,12 @@ def build_presentation_html() -> str:
             "badge": "07 // HABITAT ENGINEERING",
             "title": "Safe Enclosure Architecture & Timber Habitat Design",
             "subtitle": "Free-Roam Rabbit Proofing, Non-Toxic Timber Selection, and Chew-Safe Bio-Design",
-            "content": """
+            "content": f"""
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
                         <h3>The Death of the Traditional Hutch</h3>
+                        {ill['s7']}
                         <p class="body-text">
                             Confining a rabbit to a commercial wire cage or outdoor wooden hutch is scientifically recognized as animal neglect. Rabbits possess the athleticism of a wild hare, capable of sprinting at 30 mph and binkying 3 feet in the air.
                         </p>
@@ -480,7 +810,7 @@ def build_presentation_html() -> str:
             "badge": "08 // BEHAVIORAL SCIENCE",
             "title": "Behavioral Enrichment: Foraging, Chewing & Scent Work",
             "subtitle": "Fulfilling Species-Typical Ethological Drives Through Autonomous Work and Play",
-            "content": """
+            "content": f"""
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
@@ -508,6 +838,7 @@ def build_presentation_html() -> str:
                 <div class="col">
                     <div class="card-inner">
                         <h3>Cross-Species Foraging Blueprints</h3>
+                        {ill['s8']}
                         <div class="concept-item">
                             <div class="concept-head">
                                 <span class="tag tag-amber">Canine</span>
@@ -545,11 +876,12 @@ def build_presentation_html() -> str:
             "badge": "09 // MULTI-PET HARMONY",
             "title": "Multi-Pet Household Management & Safe Coexistence",
             "subtitle": "Navigating Predator-Prey Dynamics, Gradual Scent Swapping, and Low-Stress Cohabitation",
-            "content": """
+            "content": f"""
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
                         <h3>The Predator-Prey Evolutionary Reality</h3>
+                        {ill['s9']}
                         <p class="body-text">
                             Dogs and cats are predators with deeply encoded motor pathways; rabbits are prey animals with acute cardiovascular sensitivity to perceived threats. <strong>Never assume a sweet family dog or gentle cat &quot;would never hurt the bunny.&quot;</strong>
                         </p>
@@ -608,11 +940,12 @@ def build_presentation_html() -> str:
             "badge": "10 // LIFETIME CARE & ETHICS",
             "title": "Lifetime Commitment: Preventative Health & Quality of Life",
             "subtitle": "Proactive Veterinary Medicine, Body Condition Scoring, and Humane Life-Stage Transitions",
-            "content": """
+            "content": f"""
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
                         <h3>The Proactive Wellness Framework</h3>
+                        {ill['s10']}
                         <p class="body-text">
                             True guardianship is preventative, anticipating geriatric decline and chronic ailments years before overt clinical distress manifests:
                         </p>
@@ -709,7 +1042,7 @@ def build_presentation_html() -> str:
 
     slides_content = "\n".join(slides_html_list)
 
-    # Full HTML template with refined warm organic earth-tones
+    # Full HTML template with refined warm organic styling + animated SVG styles
     html_template = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -717,7 +1050,7 @@ def build_presentation_html() -> str:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Companion Animal Welfare, Nutrition & Cognitive Enrichment</title>
     
-    <!-- Google Fonts: Plus Jakarta Sans (humanistic sans), Fraunces (refined warm serif), JetBrains Mono -->
+    <!-- Google Fonts: Plus Jakarta Sans, Fraunces, JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -742,7 +1075,6 @@ def build_presentation_html() -> str:
             --accent-sand: #c9ada7;
             --accent-clay: #b05d3b;
             --accent-danger: #c25953;
-            --code-bg: rgba(20, 17, 15, 0.92);
             --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-serif: 'Fraunces', Georgia, serif;
             --font-mono: 'JetBrains Mono', monospace;
@@ -1485,6 +1817,86 @@ def build_presentation_html() -> str:
             color: #ffffff;
         }}
 
+        /* -------------------------------------------------------------
+           ANIMATED VECTOR ILLUSTRATION CONTAINERS & KEYFRAMES
+        ------------------------------------------------------------- */
+        .anim-svg-wrap {{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 6px 0 12px;
+            padding: 4px 0;
+        }}
+
+        .species-svg {{
+            width: 100%;
+            max-height: 120px;
+            filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.4));
+        }}
+
+        /* Floating breathing motion */
+        .float-anim {{
+            animation: float-gentle 4.8s ease-in-out infinite;
+        }}
+
+        @keyframes float-gentle {{
+            0%, 100% {{
+                transform: translateY(0px);
+            }}
+            50% {{
+                transform: translateY(-6px);
+            }}
+        }}
+
+        /* Soft pulsing for heart / glow elements */
+        .pulse-path {{
+            animation: pulse-subtle 3.2s ease-in-out infinite;
+            transform-origin: center;
+        }}
+
+        @keyframes pulse-subtle {{
+            0%, 100% {{
+                opacity: 0.82;
+            }}
+            50% {{
+                opacity: 1;
+                filter: drop-shadow(0 0 6px rgba(217, 119, 54, 0.45));
+            }}
+        }}
+
+        /* Scent / air wave animation */
+        .scent-wave {{
+            animation: scent-drift 2.8s linear infinite;
+        }}
+
+        @keyframes scent-drift {{
+            0% {{
+                stroke-dashoffset: 24;
+                opacity: 0.4;
+            }}
+            50% {{
+                opacity: 0.9;
+            }}
+            100% {{
+                stroke-dashoffset: 0;
+                opacity: 0.4;
+            }}
+        }}
+
+        .breathe-glow {{
+            animation: breathe-aura 4s ease-in-out infinite;
+        }}
+
+        @keyframes breathe-aura {{
+            0%, 100% {{
+                filter: drop-shadow(0 0 4px rgba(224, 169, 109, 0.2));
+            }}
+            50% {{
+                filter: drop-shadow(0 0 12px rgba(217, 119, 54, 0.45));
+            }}
+        }}
+
         /* Bottom Controls Bar */
         .bottom-bar {{
             position: fixed;
@@ -1629,7 +2041,7 @@ def build_presentation_html() -> str:
             new THREE.Vector3(0, 0, -45)       // Cluster 4: Creamy Off-White
         ];
 
-        // Earth-toned warm palette: warm amber, soft honey, creamy off-white, muted olive/sage
+        // Earth-toned warm palette
         const clusterColors = [
             new THREE.Color(0xd97736), // Warm Amber / Terracotta
             new THREE.Color(0xe0a96d), // Soft Honey
@@ -1694,7 +2106,7 @@ def build_presentation_html() -> str:
             particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
             particleGeo.userData = {{ originalPositions: originalPositions }};
 
-            // Soft circular glow sprite (organic feel)
+            // Soft circular glow sprite
             const canvasSprite = document.createElement('canvas');
             canvasSprite.width = 32;
             canvasSprite.height = 32;
@@ -1768,8 +2180,6 @@ def build_presentation_html() -> str:
 
             linesMesh = new THREE.LineSegments(lineGeo, lineMat);
             scene.add(linesMesh);
-
-            // Note: Harsh tech grid helper removed for organic feel
 
             // Event Listeners
             window.addEventListener('resize', onWindowResize);
@@ -1990,7 +2400,7 @@ def build_presentation_html() -> str:
 def main():
     """Generates the presentation HTML file."""
     output_path = Path("presentation.html")
-    print("[*] Building refined warm organic presentation...")
+    print("[*] Building presentation with animated vector animal art...")
     html_content = build_presentation_html()
     
     with open(output_path, "w", encoding="utf-8") as f:
