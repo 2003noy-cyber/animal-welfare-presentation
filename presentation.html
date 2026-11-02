@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companion Animal Welfare, Nutrition & Cognitive Enrichment</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans (humanistic sans), Fraunces (refined warm serif), JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #121110;
+            --card-bg: rgba(32, 28, 25, 0.82);
+            --card-inner-bg: rgba(22, 19, 17, 0.65);
+            --card-border: rgba(214, 180, 150, 0.15);
+            --card-border-glow: rgba(217, 119, 54, 0.22);
+            --text-main: #fdfbf7;
+            --text-secondary: #e8d5c4;
+            --text-muted: #a6988d;
+            --accent-terracotta: #d97736;
+            --accent-amber: #e0a96d;
+            --accent-sage: #87a987;
+            --accent-cream: #fdfbf7;
+            --accent-sand: #c9ada7;
+            --accent-clay: #b05d3b;
+            --accent-danger: #c25953;
+            --code-bg: rgba(20, 17, 15, 0.92);
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-serif: 'Fraunces', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 12% 18%, rgba(217, 119, 54, 0.07), transparent 45%),
+                radial-gradient(circle at 88% 82%, rgba(224, 169, 109, 0.06), transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(135, 169, 135, 0.04), transparent 65%);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            user-select: none;
+        }
+
+        /* 3D WebGL Canvas Layer */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Top Progress Bar */
+        #progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 4px;
+            background: rgba(255, 245, 235, 0.06);
+            z-index: 100;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 10%;
+            background: linear-gradient(90deg, var(--accent-terracotta), var(--accent-amber), var(--accent-sage));
+            box-shadow: 0 0 10px rgba(217, 119, 54, 0.4);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            position: fixed;
+            top: 18px;
+            left: 36px;
+            right: 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 50;
+            pointer-events: auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(28, 24, 21, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            padding: 8px 20px;
+            border-radius: 9999px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+        }
+
+        .brand-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--accent-terracotta);
+            box-shadow: 0 0 10px rgba(217, 119, 54, 0.6);
+            animation: pulse-dot 2.4s infinite ease-in-out;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+        }
+
+        .brand-text {
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(28, 24, 21, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+        }
+
+        .counter-badge {
+            font-family: var(--font-mono);
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--accent-amber);
+            min-width: 66px;
+            text-align: center;
+        }
+
+        .counter-total {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .btn-nav {
+            background: rgba(214, 180, 150, 0.08);
+            border: 1px solid rgba(214, 180, 150, 0.18);
+            color: var(--text-main);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav:hover {
+            background: var(--accent-amber);
+            color: #121110;
+            border-color: var(--accent-amber);
+            box-shadow: 0 0 12px rgba(224, 169, 109, 0.5);
+            transform: scale(1.08);
+        }
+
+        .btn-nav:active {
+            transform: scale(0.95);
+        }
+
+        /* Slide Container */
+        #slides-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            padding: 72px 48px 48px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            max-width: 1360px;
+            height: calc(100vh - 124px);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.975);
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        visibility 0.5s;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        /* Warm Glassmorphism Card */
+        .slide-glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(28px) saturate(140%);
+            -webkit-backdrop-filter: blur(28px) saturate(140%);
+            border: 1px solid var(--card-border);
+            border-radius: 22px;
+            padding: 34px 44px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55),
+                        inset 0 1px 0 rgba(255, 245, 235, 0.1);
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .slide-glass-card::-webkit-scrollbar {
+            width: 6px;
+        }
+        .slide-glass-card::-webkit-scrollbar-thumb {
+            background: rgba(214, 180, 150, 0.22);
+            border-radius: 3px;
+        }
+
+        /* Slide Header */
+        .slide-header {
+            margin-bottom: 22px;
+            border-bottom: 1px solid rgba(214, 180, 150, 0.1);
+            padding-bottom: 16px;
+        }
+
+        .badge-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .slide-badge {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--accent-terracotta);
+            background: rgba(217, 119, 54, 0.12);
+            border: 1px solid rgba(217, 119, 54, 0.28);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+        }
+
+        .slide-index-pill {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .slide-title {
+            font-family: var(--font-serif);
+            font-size: 2.15rem;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.015em;
+            color: #ffffff;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #fdfbf7 40%, #e0a96d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-subtitle {
+            font-size: 1.02rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        /* Slide Body Layout */
+        .slide-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 26px;
+            height: 100%;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .card-inner {
+            background: var(--card-inner-bg);
+            border: 1px solid rgba(214, 180, 150, 0.09);
+            border-radius: 15px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .card-inner.highlight-border {
+            border-color: rgba(217, 119, 54, 0.32);
+            box-shadow: 0 0 25px rgba(217, 119, 54, 0.06);
+        }
+
+        .card-inner h3 {
+            font-family: var(--font-serif);
+            font-size: 1.28rem;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .body-text {
+            font-size: 0.94rem;
+            line-height: 1.65;
+            color: var(--text-secondary);
+        }
+
+        .body-text.small {
+            font-size: 0.85rem;
+        }
+
+        .text-muted {
+            color: var(--text-muted);
+        }
+
+        .mono {
+            font-family: var(--font-mono);
+            color: var(--accent-amber);
+            background: rgba(224, 169, 109, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+        }
+
+        /* Styled List */
+        .styled-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .styled-list li {
+            font-size: 0.9rem;
+            line-height: 1.55;
+            color: var(--text-secondary);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .styled-list li::before {
+            content: "•";
+            position: absolute;
+            left: 2px;
+            color: var(--accent-terracotta);
+            font-size: 1.1em;
+        }
+
+        .styled-list strong {
+            color: #ffffff;
+        }
+
+        /* Stat Row */
+        .stat-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .stat-box {
+            background: rgba(217, 119, 54, 0.08);
+            border: 1px solid rgba(217, 119, 54, 0.22);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-amber);
+            text-shadow: 0 0 15px rgba(224, 169, 109, 0.35);
+        }
+
+        .stat-lbl {
+            font-size: 0.74rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+
+        /* Architecture Flow Diagram */
+        .arch-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 6px 0;
+        }
+
+        .arch-box {
+            background: rgba(214, 180, 150, 0.04);
+            border: 1px solid rgba(214, 180, 150, 0.12);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            text-align: center;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+
+        .arch-box.step-1 { border-color: rgba(217, 119, 54, 0.35); background: rgba(217, 119, 54, 0.08); }
+        .arch-box.step-2 { border-color: rgba(224, 169, 109, 0.35); background: rgba(224, 169, 109, 0.08); }
+        .arch-box.step-3 { border-color: rgba(135, 169, 135, 0.35); background: rgba(135, 169, 135, 0.08); }
+        .arch-box.step-4 { border-color: rgba(201, 173, 167, 0.35); background: rgba(201, 173, 167, 0.08); }
+        .arch-box.step-resp { border-color: rgba(224, 169, 109, 0.6); background: rgba(224, 169, 109, 0.15); font-weight: 600; color: #fff; }
+
+        .arch-arrow {
+            text-align: center;
+            color: var(--accent-terracotta);
+            font-size: 0.85rem;
+            line-height: 1;
+        }
+
+        /* Callout Box */
+        .callout-box {
+            background: rgba(217, 119, 54, 0.07);
+            border-left: 3px solid var(--accent-terracotta);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .callout-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--accent-amber);
+        }
+
+        .callout-text {
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: var(--text-secondary);
+        }
+
+        /* Concept Items */
+        .concept-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(214, 180, 150, 0.08);
+        }
+
+        .concept-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .concept-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .tag-amber {
+            background: rgba(224, 169, 109, 0.15);
+            border: 1px solid rgba(224, 169, 109, 0.35);
+            color: var(--accent-amber);
+        }
+
+        .tag-terracotta {
+            background: rgba(217, 119, 54, 0.15);
+            border: 1px solid rgba(217, 119, 54, 0.35);
+            color: var(--accent-terracotta);
+        }
+
+        .tag-sage {
+            background: rgba(135, 169, 135, 0.15);
+            border: 1px solid rgba(135, 169, 135, 0.35);
+            color: var(--accent-sage);
+        }
+
+        /* Table Styling */
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .tech-table th {
+            text-align: left;
+            padding: 8px 10px;
+            background: rgba(214, 180, 150, 0.04);
+            border-bottom: 1px solid rgba(214, 180, 150, 0.14);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+        }
+
+        .tech-table td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(214, 180, 150, 0.06);
+            color: var(--text-secondary);
+            vertical-align: top;
+            line-height: 1.45;
+        }
+
+        .tech-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tech-table strong {
+            color: #ffffff;
+            display: block;
+        }
+
+        /* Grid Cards */
+        .quant-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .quant-card {
+            background: rgba(214, 180, 150, 0.03);
+            border: 1px solid rgba(214, 180, 150, 0.08);
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+
+        .quant-title {
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: var(--accent-amber);
+            margin-bottom: 4px;
+        }
+
+        .quant-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        /* Failure / Alert Boxes */
+        .failure-box {
+            background: rgba(194, 89, 83, 0.08);
+            border: 1px solid rgba(194, 89, 83, 0.28);
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .failure-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #ffffff;
+        }
+
+        .badge-danger {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: rgba(194, 89, 83, 0.2);
+            color: #e57373;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(194, 89, 83, 0.4);
+        }
+
+        /* Funnel Diagram */
+        .funnel-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 6px 0;
+        }
+
+        .funnel-step {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: rgba(214, 180, 150, 0.03);
+            border: 1px solid rgba(214, 180, 150, 0.09);
+        }
+
+        .funnel-step.f1 { border-color: rgba(217, 119, 54, 0.35); }
+        .funnel-step.f2 { border-color: rgba(224, 169, 109, 0.35); background: rgba(224, 169, 109, 0.06); }
+        .funnel-step.f3 { border-color: rgba(135, 169, 135, 0.35); background: rgba(135, 169, 135, 0.08); }
+
+        .f-num {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent-terracotta);
+            min-width: 65px;
+        }
+
+        .f-desc strong {
+            font-size: 0.88rem;
+            color: #ffffff;
+            display: block;
+        }
+
+        .f-desc p {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+
+        .funnel-arrow {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--accent-amber);
+            font-family: var(--font-mono);
+        }
+
+        /* Triad / Assessment Cards */
+        .triad-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .triad-card {
+            display: flex;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: rgba(214, 180, 150, 0.03);
+            border: 1px solid rgba(214, 180, 150, 0.08);
+        }
+
+        .triad-card.t-blue { border-left: 4px solid var(--accent-terracotta); }
+        .triad-card.t-purple { border-left: 4px solid var(--accent-amber); }
+        .triad-card.t-emerald { border-left: 4px solid var(--accent-sage); }
+
+        .triad-num {
+            font-family: var(--font-serif);
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--accent-amber);
+            line-height: 1;
+        }
+
+        .triad-body strong {
+            font-size: 0.92rem;
+            color: #ffffff;
+            display: block;
+        }
+
+        .triad-body p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin: 2px 0 4px;
+        }
+
+        /* Timeline Bars */
+        .latency-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .lat-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: rgba(214, 180, 150, 0.04);
+            border-left: 4px solid var(--accent-amber);
+            font-size: 0.85rem;
+        }
+
+        .lat-bar.l-cache { border-left-color: var(--accent-sage); }
+        .lat-bar.l-vdb { border-left-color: var(--accent-terracotta); }
+        .lat-bar.l-bm25 { border-left-color: var(--accent-amber); }
+        .lat-bar.l-rerank { border-left-color: var(--accent-sand); }
+        .lat-bar.l-ttft { border-left-color: var(--accent-clay); font-weight: 600; }
+
+        .lat-name {
+            color: #ffffff;
+        }
+
+        .lat-time {
+            font-family: var(--font-mono);
+            color: var(--accent-amber);
+            font-weight: 600;
+        }
+
+        .sec-item {
+            margin-top: 8px;
+            padding-left: 12px;
+            border-left: 2px solid rgba(214, 180, 150, 0.2);
+        }
+
+        .sec-item strong {
+            font-size: 0.85rem;
+            color: #ffffff;
+            display: block;
+        }
+
+        .summary-conclusion {
+            margin-top: 10px;
+            padding: 14px;
+            background: rgba(224, 169, 109, 0.09);
+            border: 1px solid rgba(224, 169, 109, 0.28);
+            border-radius: 10px;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: #ffffff;
+        }
+
+        /* Bottom Controls Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(28, 24, 21, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            padding: 8px 24px;
+            border-radius: 9999px;
+            z-index: 50;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+        }
+
+        .slide-dots {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(214, 180, 150, 0.2);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .dot:hover {
+            background: rgba(224, 169, 109, 0.6);
+            transform: scale(1.2);
+        }
+
+        .dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: var(--accent-amber);
+            box-shadow: 0 0 10px rgba(224, 169, 109, 0.5);
+        }
+
+        .hint-keys {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .kbd {
+            background: rgba(214, 180, 150, 0.08);
+            border: 1px solid rgba(214, 180, 150, 0.18);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .slide {
+                height: calc(100vh - 140px);
+            }
+            .slide-title {
+                font-size: 1.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Three.js 3D Background Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Top Progress Bar -->
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <nav class="top-nav">
+        <div class="brand">
+            <div class="brand-dot"></div>
+            <span class="brand-text">Animal Welfare Masterclass // Canines, Felines &amp; Lagomorphs</span>
+        </div>
+        <div class="nav-controls">
+            <button class="btn-nav" id="btn-prev" title="Previous Slide (← / ↑)">&#8592;</button>
+            <div class="counter-badge">
+                <span id="curr-slide-num">01</span> <span class="counter-total">/ 10</span>
+            </div>
+            <button class="btn-nav" id="btn-next" title="Next Slide (→ / ↓ / Space)">&#8594;</button>
+        </div>
+    </nav>
+
+    <!-- Slides Viewport -->
+    <main id="slides-container">
+
+        <section class="slide" id="slide-1" data-slide="1">
+            <div class="slide-glass-card">
+                <header class="slide-header">
+                    <div class="badge-wrapper">
+                        <span class="slide-badge">01 // WELFARE SCIENCE</span>
+                        <span class="slide-index-pill">Slide 01 / 10</span>
+                    </div>
+                    <h1 class="slide-title">Holistic Companion Animal Care & Welfare</h1>
+                    <p class="slide-subtitle">From Basic Survival to Flourishing: Implementing the Modern Five Domains Welfare Model</p>
+                </header>
+                <div class="slide-body">
+                    
+            <div class="grid-2col">
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>Beyond the 'Five Freedoms'</h3>
+                        <p class="body-text">
+                            Traditional animal welfare historically focused on the mere absence of suffering (<span class="mono">The Five Freedoms</span>: freedom from thirst, hunger, fear, pain, and discomfort). Modern behavioral science has shifted decisively to the <strong>Five Domains Model</strong> (Mellor et al.), which asserts that true welfare requires the active promotion of <em>positive affective states</em>.
+                        </p>
+                        <ul class="styled-list">
+                            <li><strong>Nutrition Domain:</strong> Satiety, varied textures, natural foraging opportunities, and species-optimal nutrient density.</li>
+                            <li><strong>Environment Domain:</strong> Thermal comfort, physical sanctuary, predictability, and sensory richness.</li>
+                            <li><strong>Health Domain:</strong> Absence of chronic pain, sound musculoskeletal health, and functional vitality.</li>
+                            <li><strong>Behavioral Interactions:</strong> Autonomy, agency, positive social bonding, and playful exploration.</li>
+                            <li><strong>Mental/Affective State:</strong> Generating feelings of joy, confidence, curiosity, and contentment.</li>
+                        </ul>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-box">
+                            <span class="stat-val">5 Domains</span>
+                            <span class="stat-lbl">Scientific Welfare Standard</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-val">+80%</span>
+                            <span class="stat-lbl">Stress Reduction via Agency</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-inner highlight-border">
+                        <h3>The Triad of Species-Appropriate Guardianship</h3>
+                        <p class="body-text">
+                            Holistic companion guardianship acknowledges that physiological health, emotional equilibrium, and cognitive fulfillment are deeply intertwined:
+                        </p>
+                        <div class="arch-diagram">
+                            <div class="arch-box step-1">1. Biological Integrity (Species-Appropriate Nutrition & Vet Care)</div>
+                            <div class="arch-arrow">&#10140;</div>
+                            <div class="arch-box step-2">2. Environmental Sanctuary (Safe Habitats & Territory Architecture)</div>
+                            <div class="arch-arrow">&#10140;</div>
+                            <div class="arch-box step-3">3. Cognitive Agency (Puzzles, Scentwork & Foraging Fulfillment)</div>
+                            <div class="arch-arrow">&#10140;</div>
+                            <div class="arch-box step-4">4. Interspecies Trust (Force-Free Bonding & Choice-Based Training)</div>
+                            <div class="arch-arrow">&#10140;</div>
+                            <div class="arch-box step-resp">Outcome: High Affective Well-Being & Longevity</div>
+                        </div>
+                        <div class="callout-box">
+                            <div class="callout-title">Ethical Imperative</div>
+                            <p class="callout-text">
+                                We curate 100% of our companion animals' environments, diets, and choices. Their quality of life is an intentional design choice made daily by their human guardians.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="slide" id="slide-2" data-slide="2">
+            <div class="slide-glass-card">
+                <header class="slide-header">
+                    <div class="badge-wrapper">
+                        <span class="slide-badge">02 // COMPARATIVE BIOLOGY</span>
+                        <span class="slide-index-pill">Slide 02 / 10</span>
+                    </div>
+                    <h1 class="slide-title">Species-Specific Needs: Dogs vs. Cats vs. Rabbits</h1>
+                    <p class="slide-subtitle">Decoding Divergent Evolutionary Biologies, Dietary Classes, and Social Structures</p>
+                </header>
+                <div class="slide-body">
+                    
+            <div class="grid-2col">
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>Comparative Biological Profiles</h3>
+                        <p class="body-text">
+                            Applying canine assumptions to felines or treating lagomorphs like small dogs is a frequent root cause of behavioral dysfunction and medical emergencies. Guardians must honor distinct evolutionary paths:
+                        </p>
+                        <table class="tech-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Canines (Dogs)</th>
+                                    <th>Felines (Cats)</th>
+                                    <th>Lagomorphs (Rabbits)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Dietary Classification</strong></td>
+                                    <td>Facultative Carnivore / Opportunistic Omnivore</td>
+                                    <td>Strict Obligate Carnivore (mandatory animal tissue)</td>
+                                    <td>Hindgut-Fermenting Herbivore (continuous fiber)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Essential Nutrients</strong></td>
+                                    <td>Flexible macro profile, broad digestibility</td>
+                                    <td>Taurine, Arachidonic Acid, Preformed Vit A, High Protein</td>
+                                    <td>Indigestible long-stem fiber, cellulose, silica</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Social Model</strong></td>
+                                    <td>Cooperative group / pack; human bond synergy</td>
+                                    <td>Solitary territorial hunter; selective colonies</td>
+                                    <td>Crepuscular colonial prey animal; pair-bonding necessity</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Primary Sense</strong></td>
+                                    <td>Olfactory (220M–300M scent receptors)</td>
+                                    <td>Visual motion & high-frequency auditory</td>
+                                    <td>Panoramic peripheral vision (360&deg;) & vibration scent</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>Evolutionary Drivers & Core Hazards</h3>
+                        <div class="concept-item">
+                            <div class="concept-head">
+                                <span class="tag tag-amber">Canine</span>
+                                <strong>Canine: Mutual Gaze & Cognitive Work</strong>
+                            </div>
+                            <p class="body-text">
+                                Co-evolution with humans created an oxytocin feedback loop during direct eye contact. Understimulation leads to destructive displacement behaviors and separation anxiety.
+                            </p>
+                        </div>
+                        <div class="concept-item">
+                            <div class="concept-head">
+                                <span class="tag tag-terracotta">Feline</span>
+                                <strong>Feline: Neophobia & Vertical Safety</strong>
+                            </div>
+                            <p class="body-text">
+                                Obligate carnivores with tiny gastric capacity. Highly prone to hepatic lipidosis if anorexic for &gt;48 hours. Require 3D elevated escapes to feel psychologically secure.
+                            </p>
+                        </div>
+                        <div class="concept-item">
+                            <div class="concept-head">
+                                <span class="tag tag-sage">Lagomorph</span>
+                                <strong>Lagomorph: Masking Illness & Cecal Fermentation</strong>
+                            </div>
+                            <p class="body-text">
+                                As low-trophic prey, rabbits actively suppress all clinical signs of pain or illness. Minor digestive slowdowns can escalate into fatal GI stasis within 12–24 hours.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="slide" id="slide-3" data-slide="3">
+            <div class="slide-glass-card">
+                <header class="slide-header">
+                    <div class="badge-wrapper">
+                        <span class="slide-badge">03 // CANINE COGNITION</span>
+                        <span class="slide-index-pill">Slide 03 / 10</span>
+                    </div>
+                    <h1 class="slide-title">Canine Cognitive Enrichment & Puzzle Work</h1>
+                    <p class="slide-subtitle">Stimulating the Neocortex: Contra-freeloading, Olfactory Processing, and Problem-Solving</p>
+                </header>
+                <div class="slide-body">
+                    
+            <div class="grid-2col">
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>The Science of Mental Stimulation</h3>
+                        <p class="body-text">
+                            A canine brain is an energetic powerhouse. Physical exercise alone simply builds an athlete with higher cardiovascular endurance; true canine exhaustion and emotional calm come from <strong>cognitive processing and olfactory decoding</strong>.
+                        </p>
+                        <div class="concept-item">
+                            <div class="concept-head">
+                                <span class="tag tag-amber">Cognition</span>
+                                <strong>The Contra-Freeloading Phenomenon</strong>
+                            </div>
+                            <p class="body-text">
+                                In ethological experiments, domestic canines consistently choose to solve a puzzle or manipulate an apparatus to access kibble over consuming identical free food from a stationary bowl. Solving puzzles triggers dopamine release.
+                            </p>
+                        </div>
+                        <div class="concept-item">
+                            <div class="concept-head">
+                                <span class="tag tag-sage">Olfaction</span>
+                                <strong>Olfactory Neuro-Exhaustion</strong>
+                            </div>
+                            <p class="body-text">
+                                Dogs dedicate approximately 10% of their total brain volume to the olfactory bulb. 15 minutes of structured scent searching (nosework) produces neurochemical fatigue equivalent to 45 minutes of steady aerobic running.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>Tiered Puzzle Progression Framework</h3>
+                        <div class="funnel-container">
+                            <div class="funnel-step f1">
+                                <span class="f-num">LEVEL 1</span>
+                                <div class="f-desc">
+                                    <strong>Sensory & Licking (Endorphin Release)</strong>
+                                    <p>Snuffle mats, textured silicone lick mats (kefir, pumpkin, wet pat&eacute;). Repetitive licking releases calming endorphins.</p>
+                                </div>
+                            </div>
+                            <div class="funnel-arrow">&#9660; Mastered in &lt; 2 Minutes</div>
+                            <div class="funnel-step f2">
+                                <span class="f-num">LEVEL 2</span>
+                                <div class="f-desc">
+                                    <strong>Mechanical Manipulation (Sliders & Rollers)</strong>
+                                    <p>Sliding tile wood puzzles, Bob-A-Lot wobble feeders, spinning bottle dispensers requiring paw and snout coordination.</p>
+                                </div>
+                            </div>
+                            <div class="funnel-arrow">&#9660; Sequential Problem Solving</div>
+                            <div class="funnel-step f3">
+                                <span class="f-num">LEVEL 3</span>
+                                <div class="f-desc">
+                                    <strong>Multi-Step Sequential Locks</strong>
+                                    <p>Drawer pulls, twist pegs, lift-and-slide combinations (e.g. Nina Ottosson MultiPuzzle), requiring spatial memory and restraint.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout-box">
+                            <div class="callout-title">Golden Rule of Puzzle Enrichment</div>
+                            <p class="callout-text">
+                                Never let a puzzle become an exercise in frustration. If your dog bites or paws violently at the puzzle, drop down one difficulty tier and coach them.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="slide" id="slide-4" data-slide="4">
+            <div class="slide-glass-card">
+                <header class="slide-header">
+                    <div class="badge-wrapper">
+                        <span class="slide-badge">04 // GERIATRIC CARE</span>
+                        <span class="slide-index-pill">Slide 04 / 10</span>
+                    </div>
+                    <h1 class="slide-title">Senior Dog Care: Mobility, Joint Support & Mental Stimulation</h1>
+                    <p class="slide-subtitle">Multimodal Arthritis Management, Neuroprotection, and Cognitive Dysfunction Syndrome (CDS)</p>
+                </header>
+                <div class="slide-body">
+                    
+            <div class="grid-2col">
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>Multimodal Osteoarthritis (OA) Management</h3>
+                        <p class="body-text">
+                            Over 80% of dogs aged 8 and older suffer from chronic degenerative joint disease. Modern veterinary medicine demands a layered, multimodal strategy rather than relying solely on high-dose pharmaceuticals:
+                        </p>
+                        <ul class="styled-list">
+                            <li><strong>Biological Therapies:</strong> Anti-NGF (Nerve Growth Factor) monoclonal antibodies (e.g., bedinvetmab / Librela) to interrupt chronic pain pathways without hepatic or renal toxicity.</li>
+                            <li><strong>Targeted Nutraceuticals:</strong> High-purity EPA/DHA marine omega-3 fatty acids (&gt;100 mg/kg), undenatured Type II collagen (UC-II), and green-lipped mussel extract.</li>
+                            <li><strong>Environmental Ergonomics:</strong> Full runner rug coverage across slippery tile/hardwood, orthopedic high-density memory foam beds, and elevated orthopedic bowls.</li>
+                            <li><strong>Low-Impact Motion:</strong> Controlled underwater treadmill hydrotherapy and passive range-of-motion (PROM) stretching.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>Cognitive Dysfunction Syndrome (CDS)</h3>
+                        <p class="body-text">
+                            Canine dementia mirrors human Alzheimer's disease with beta-amyloid plaque deposition and neuroinflammation. Diagnosed via the <strong>DISHA</strong> diagnostic framework:
+                        </p>
+                        <div class="quant-grid">
+                            <div class="quant-card">
+                                <div class="quant-title">D - Disorientation</div>
+                                <p class="quant-desc">Staring blankly at walls, getting stuck behind doors, inability to navigate familiar rooms.</p>
+                            </div>
+                            <div class="quant-card">
+                                <div class="quant-title">I - Interactions Altered</div>
+                                <p class="quant-desc">Clinginess or uncharacteristic emotional withdrawal from family members and companion pets.</p>
+                            </div>
+                            <div class="quant-card">
+                                <div class="quant-title">S - Sleep-Wake Cycles</div>
+                                <p class="quant-desc">Pacing, panting, and vocalizing at night; deep sleeping during interactive daytime hours.</p>
+                            </div>
+                            <div class="quant-card">
+                                <div class="quant-title">H / A - House Soiling & Activity</div>
+                                <p class="quant-desc">Loss of house-training cues, aimless repetitive wandering, or sudden generalized lethargy.</p>
+                            </div>
+                        </div>
+                        <div class="callout-box">
+                            <div class="callout-title">Geriatric Neuro-Preservation</div>
+                            <p class="callout-text">
+                                Replace strenuous agility walks with &quot;sniffaris&quot; (slow scent walks) and gentle, flat lick-mats to stimulate cognitive function without musculoskeletal strain.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="slide" id="slide-5" data-slide="5">
+            <div class="slide-glass-card">
+                <header class="slide-header">
+                    <div class="badge-wrapper">
+                        <span class="slide-badge">05 // FELINE WELFARE</span>
+                        <span class="slide-index-pill">Slide 05 / 10</span>
+                    </div>
+                    <h1 class="slide-title">Feline Environmental Enrichment & Territory Dynamics</h1>
+                    <p class="slide-subtitle">Architecting 3D Vertical Space, Predatory Motor Sequences, and Stress-Free Resource Hubs</p>
+                </header>
+                <div class="slide-body">
+                    
+            <div class="grid-2col">
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>The 3D Vertical Territory Architecture</h3>
+                        <p class="body-text">
+                            Domestic cats retain the instinctual wiring of both solitary apex predators and vulnerable mid-tier prey. They do not navigate living spaces in square feet; they calculate territory in <strong>cubic volume</strong>.
+                        </p>
+                        <ul class="styled-list">
+                            <li><strong>Cat Superhighways:</strong> Continuous elevated wall tracks, staggered floating shelves, and window perches allowing movement across an entire room without touching the floor.</li>
+                            <li><strong>Conflict Mitigation:</strong> Vertical escape routes allow coexisting felines to share visual airspace while establishing personal hierarchical zones, eliminating territorial cornering.</li>
+                            <li><strong>Scent Marking Posts:</strong> Substantial vertical scratching posts (&ge; 32 inches high) that allow full spinal extension to deposit interdigital pheromones and visual territorial signals.</li>
+                        </ul>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-box">
+                            <span class="stat-val">N + 1</span>
+                            <span class="stat-lbl">Golden Rule for Litter Boxes & Water</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-val">32 in+</span>
+                            <span class="stat-lbl">Min Scratching Post Height</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-inner highlight-border">
+                        <h3>The Complete Predatory Motor Pattern</h3>
+                        <p class="body-text">
+                            Indoor play must honor the neurological predatory sequence to prevent chronic cortisol elevation and behavioral displacement:
+                        </p>
+                        <div class="arch-diagram">
+                            <div class="arch-box step-1">1. Stare (Visual Lock-On)</div>
+                            <div class="arch-arrow">&#10140;</div>
+                            <div class="arch-box step-2">2. Stalk &amp; Creep (Silent Slow Approach)</div>
+                            <div class="arch-arrow">&#10140;</div>
+                            <div class="arch-box step-3">3. Chase &amp; Sprint (High-Velocity Pursuit)</div>
+                            <div class="arch-arrow">&#10140;</div>
+                            <div class="arch-box step-4">4. Pounce &amp; Capture (Tactile Paw Pinning)</div>
+                            <div class="arch-arrow">&#10140;</div>
+                            <div class="arch-box step-1">5. Kill-Bite (Neck Grip Stimulation)</div>
+                            <div class="arch-arrow">&#10140;</div>
+                            <div class="arch-box step-resp">6. Eat, Groom &amp; Sleep (Dopamine Resolution)</div>
+                        </div>
+                        <div class="failure-box">
+                            <div class="failure-title">
+                                <span class="badge-danger">CRITICAL HAZARD</span>
+                                <strong>Laser Pointer Syndrome</strong>
+                            </div>
+                            <p class="body-text small">
+                                Endless red laser dot pursuit without a physical catch breaks the predatory sequence at step 4. This causes chronic neurochemical frustration and obsessive-compulsive tail chasing. Always transition to a tangible feathered or plush prey reward at the conclusion of play!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="slide" id="slide-6" data-slide="6">
+            <div class="slide-glass-card">
+                <header class="slide-header">
+                    <div class="badge-wrapper">
+                        <span class="slide-badge">06 // LAGOMORPH NUTRITION</span>
+                        <span class="slide-index-pill">Slide 06 / 10</span>
+                    </div>
+                    <h1 class="slide-title">Lagomorph Welfare: Delicate Digestive Systems & Hay Diet</h1>
+                    <p class="slide-subtitle">Hindgut Fermentation, Continuous Dental Wear, and Gastrointestinal (GI) Stasis Prevention</p>
+                </header>
+                <div class="slide-body">
+                    
+            <div class="grid-2col">
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>The Digestive Mechanics of Cecotrophy</h3>
+                        <p class="body-text">
+                            Rabbits possess a specialized digestive system: <strong>hindgut cecal fermentation</strong>. Their enormous cecum hosts a sensitive microbial ecosystem that converts cellulose into bioavailable nutrition.
+                        </p>
+                        <div class="concept-item">
+                            <div class="concept-head">
+                                <span class="tag tag-sage">Hay 85%+</span>
+                                <strong>The Indigestible Fiber Imperative</strong>
+                            </div>
+                            <p class="body-text">
+                                Long-stem grass hay (Timothy, Orchard, Meadow) is the single most vital component of lagomorph life. It mechanically pushes food through the gut and wears down their continuously growing (elodont) open-rooted teeth at 2–3 mm per week.
+                            </p>
+                        </div>
+                        <div class="concept-item">
+                            <div class="concept-head">
+                                <span class="tag tag-amber">Cecotropes</span>
+                                <strong>The Nutritional Loop</strong>
+                            </div>
+                            <p class="body-text">
+                                Fermented cecal contents are packaged with mucus coats into fragrant nutrient capsules (&quot;night feces&quot;) ingested directly from the cecum, supplying vital B-complex vitamins, volatile fatty acids, and microbial proteins.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>GI Stasis: The Veterinary Emergency</h3>
+                        <p class="body-text">
+                            Gastrointestinal hypomotility (GI Stasis) is the leading cause of mortality in pet rabbits. It is a secondary symptom of pain, stress, dental spikes, or low fiber:
+                        </p>
+                        <div class="quant-grid">
+                            <div class="quant-card">
+                                <div class="quant-title">Step 1: Gut Slowdown &amp; Pain</div>
+                                <p class="quant-desc">Stress or dehydration slows intestinal contractions. Gas builds up, causing acute visceral abdominal cramping.</p>
+                            </div>
+                            <div class="quant-card">
+                                <div class="quant-title">Step 2: Microbial Dysbiosis &amp; Compaction</div>
+                                <p class="quant-desc">Beneficial flora perish. Ingested fur and food desiccate into an obstructive impaction in the stomach or cecum.</p>
+                            </div>
+                            <div class="quant-card">
+                                <div class="quant-title">Step 3: Hypovolemic Shock &amp; Hepatic Lipidosis</div>
+                                <p class="quant-desc">Endotoxins release into the bloodstream. Body temperature drops below 100&deg;F (hypothermia), requiring immediate emergency veterinary intervention.</p>
+                            </div>
+                        </div>
+                        <div class="callout-box">
+                            <div class="callout-title">The 12-Hour Emergency Threshold</div>
+                            <p class="callout-text">
+                                A rabbit that has produced no fecal pellets or refused favorite greens for &gt;8–12 hours is in a life-threatening medical emergency. Never &quot;wait until tomorrow morning.&quot;
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="slide" id="slide-7" data-slide="7">
+            <div class="slide-glass-card">
+                <header class="slide-header">
+                    <div class="badge-wrapper">
+                        <span class="slide-badge">07 // HABITAT ENGINEERING</span>
+                        <span class="slide-index-pill">Slide 07 / 10</span>
+                    </div>
+                    <h1 class="slide-title">Safe Enclosure Architecture & Timber Habitat Design</h1>
+                    <p class="slide-subtitle">Free-Roam Rabbit Proofing, Non-Toxic Timber Selection, and Chew-Safe Bio-Design</p>
+                </header>
+                <div class="slide-body">
+                    
+            <div class="grid-2col">
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>The Death of the Traditional Hutch</h3>
+                        <p class="body-text">
+                            Confining a rabbit to a commercial wire cage or outdoor wooden hutch is scientifically recognized as animal neglect. Rabbits possess the athleticism of a wild hare, capable of sprinting at 30 mph and binkying 3 feet in the air.
+                        </p>
+                        <ul class="styled-list">
+                            <li><strong>Minimum Enclosure Standard:</strong> Minimum 12 sq ft of flat horizontal pen area (e.g. 4x4 x-pen) with at least 32 sq ft of daily free-roam exercise space.</li>
+                            <li><strong>Wire Floor Danger (Pododermatitis):</strong> Wire cage bottoms strip the protective fur pads from rabbit hocks, causing chronic ulcerative bacterial bone infections. Soft carpet, fleece, or EVA foam under mats are mandatory.</li>
+                            <li><strong>Dual-Exit Castles:</strong> Prey animals panic when trapped. Every wooden hideout must have at least two distinct egress holes to satisfy flight-instinct safety.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>The Wood Toxicity &amp; Chewing Safety Matrix</h3>
+                        <p class="body-text">
+                            Because rabbits and rodents must continuously chew wood to grind incisors and molars, non-toxic timber selection is critical:
+                        </p>
+                        <table class="tech-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Timber Species</th>
+                                    <th>Safety Status &amp; Bio-Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>100% Safe Woods</strong></td>
+                                    <td>Apple, Pear, Hazelnut, Willow, Aspen, Birch, Kiln-Dried Pine</td>
+                                    <td>Non-toxic lignin; safe for vigorous gnawing; high dental wear value.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dangerous / Toxic</strong></td>
+                                    <td>Fresh Cedar, Fresh Green Pine</td>
+                                    <td>Aromatic plicatic and abietic acid phenols cause hepatic enzyme destruction and respiratory distress.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Lethal Prunus Species</strong></td>
+                                    <td>Cherry, Peach, Apricot, Plum (Fresh Twigs)</td>
+                                    <td>Contains cyanogenic glycosides (amygdalin) yielding toxic cyanide upon digestion.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hardwood Toxins</strong></td>
+                                    <td>Oak, Black Walnut, Yew</td>
+                                    <td>High tannin astringency; juglone toxins inducing colic and renal tubular necrosis.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="slide" id="slide-8" data-slide="8">
+            <div class="slide-glass-card">
+                <header class="slide-header">
+                    <div class="badge-wrapper">
+                        <span class="slide-badge">08 // BEHAVIORAL SCIENCE</span>
+                        <span class="slide-index-pill">Slide 08 / 10</span>
+                    </div>
+                    <h1 class="slide-title">Behavioral Enrichment: Foraging, Chewing & Scent Work</h1>
+                    <p class="slide-subtitle">Fulfilling Species-Typical Ethological Drives Through Autonomous Work and Play</p>
+                </header>
+                <div class="slide-body">
+                    
+            <div class="grid-2col">
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>Ethological Deprivation &amp; Stereotypies</h3>
+                        <p class="body-text">
+                            When captive companion animals are prevented from performing natural evolutionary behaviors (foraging, seeking, digging, chewing, sniffing), the psychological pressure manifests as <strong>abnormal repetitive behaviors (stereotypies)</strong> and displacement aggression:
+                        </p>
+                        <ul class="styled-list">
+                            <li><strong>Bar Biting &amp; Licking:</strong> Obsessive gnawing of enclosure grates in rabbits indicating severe environmental frustration.</li>
+                            <li><strong>Psychogenic Alopecia:</strong> Self-induced hair plucking in cats driven by chronic sensory understimulation and territorial insecurity.</li>
+                            <li><strong>Repetitive Pacing &amp; Flank Sucking:</strong> Compulsive motor loops in dogs lacking cognitive puzzle outlets.</li>
+                        </ul>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-box">
+                            <span class="stat-val">70%</span>
+                            <span class="stat-lbl">Daily Foraging in Wild Equiv.</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-val">&lt; 15 min</span>
+                            <span class="stat-lbl">Typical Bowl-Fed Eating Time</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>Cross-Species Foraging Blueprints</h3>
+                        <div class="concept-item">
+                            <div class="concept-head">
+                                <span class="tag tag-amber">Canine</span>
+                                <strong>Canine: Olfactory Scatter &amp; Destruction Boxes</strong>
+                            </div>
+                            <p class="body-text">
+                                Scatter feeding across outdoor grass, frozen multi-layer KONGs (bone broth, yogurt, liver paste), and safe shredding boxes (kibble hidden inside cardboard nested containers).
+                            </p>
+                        </div>
+                        <div class="concept-item">
+                            <div class="concept-head">
+                                <span class="tag tag-terracotta">Feline</span>
+                                <strong>Feline: Puzzle Mice &amp; Micro-Forage Stations</strong>
+                            </div>
+                            <p class="body-text">
+                                Dividing daily portions into 5–6 hidden puzzle &quot;mice&quot; perched at varying elevations across the home, forcing the cat to hunt for every bite throughout the 24-hour cycle.
+                            </p>
+                        </div>
+                        <div class="concept-item">
+                            <div class="concept-head">
+                                <span class="tag tag-sage">Lagomorph</span>
+                                <strong>Lagomorph: Dig Boxes &amp; Forage Trays</strong>
+                            </div>
+                            <p class="body-text">
+                                Large storage totes filled with shredded paper, sterile soil, or timothy hay mixed with dried dandelion leaves, marigold flowers, and chamomile buds to fulfill the burrowing/digging drive.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="slide" id="slide-9" data-slide="9">
+            <div class="slide-glass-card">
+                <header class="slide-header">
+                    <div class="badge-wrapper">
+                        <span class="slide-badge">09 // MULTI-PET HARMONY</span>
+                        <span class="slide-index-pill">Slide 09 / 10</span>
+                    </div>
+                    <h1 class="slide-title">Multi-Pet Household Management & Safe Coexistence</h1>
+                    <p class="slide-subtitle">Navigating Predator-Prey Dynamics, Gradual Scent Swapping, and Low-Stress Cohabitation</p>
+                </header>
+                <div class="slide-body">
+                    
+            <div class="grid-2col">
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>The Predator-Prey Evolutionary Reality</h3>
+                        <p class="body-text">
+                            Dogs and cats are predators with deeply encoded motor pathways; rabbits are prey animals with acute cardiovascular sensitivity to perceived threats. <strong>Never assume a sweet family dog or gentle cat &quot;would never hurt the bunny.&quot;</strong>
+                        </p>
+                        <div class="failure-box">
+                            <div class="failure-title">
+                                <span class="badge-danger">BIOLOGICAL FACT</span>
+                                <strong>The Sudden Flight Trigger</strong>
+                            </div>
+                            <p class="body-text">
+                                A dog can coexist peacefully for months with a stationary rabbit, but the instant the rabbit makes a sudden erratic hop, the dog's instinctive <em>Predatory Motor Sequence</em> (Eye &rarr; Stalk &rarr; Chase &rarr; Grab-Bite &rarr; Kill-Bite) can fire reflexively before conscious inhibition occurs.
+                            </p>
+                        </div>
+                        <div class="callout-box">
+                            <div class="callout-title">The Sanctuary Zone Axiom</div>
+                            <p class="callout-text">
+                                Small prey animals must have a dedicated, fortified sanctuary room with solid double-barrier protection that dogs and cats can never access unsupervised.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>4-Stage Desensitization &amp; Introduction Protocol</h3>
+                        <div class="funnel-container">
+                            <div class="funnel-step f1">
+                                <span class="f-num">STAGE 1</span>
+                                <div class="f-desc">
+                                    <strong>Blind Scent Swapping (No Visual Contact)</strong>
+                                    <p>Exchange scent cloths, bedding, and brushed fur between species. Feed high-value treats in the presence of the other animal's scent to establish positive conditioning.</p>
+                                </div>
+                            </div>
+                            <div class="funnel-arrow">&#9660; Neutral Emotional Response Achieved</div>
+                            <div class="funnel-step f2">
+                                <span class="f-num">STAGE 2</span>
+                                <div class="f-desc">
+                                    <strong>Barrier Visual Interaction (Distanced)</strong>
+                                    <p>Sturdy double-grid baby gate or glass door. The dog/cat is positioned 15 feet away on a loose lead. Reward instant eye contact disengagement and calmness.</p>
+                                </div>
+                            </div>
+                            <div class="funnel-arrow">&#9660; Zero Fixation / Zero Whining / Relaxed Posture</div>
+                            <div class="funnel-step f3">
+                                <span class="f-num">STAGE 3</span>
+                                <div class="f-desc">
+                                    <strong>Controlled Shared Airspace (Leashed &amp; Fortified)</strong>
+                                    <p>The rabbit is safe inside an impact-resistant habitat. The dog executes calm &quot;down-stays&quot; on a short tether. Absolute zero tolerance for stiff postures or hyper-focus.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="slide" id="slide-10" data-slide="10">
+            <div class="slide-glass-card">
+                <header class="slide-header">
+                    <div class="badge-wrapper">
+                        <span class="slide-badge">10 // LIFETIME CARE & ETHICS</span>
+                        <span class="slide-index-pill">Slide 10 / 10</span>
+                    </div>
+                    <h1 class="slide-title">Lifetime Commitment: Preventative Health & Quality of Life</h1>
+                    <p class="slide-subtitle">Proactive Veterinary Medicine, Body Condition Scoring, and Humane Life-Stage Transitions</p>
+                </header>
+                <div class="slide-body">
+                    
+            <div class="grid-2col">
+                <div class="col">
+                    <div class="card-inner">
+                        <h3>The Proactive Wellness Framework</h3>
+                        <p class="body-text">
+                            True guardianship is preventative, anticipating geriatric decline and chronic ailments years before overt clinical distress manifests:
+                        </p>
+                        <div class="latency-timeline">
+                            <div class="lat-bar l-cache">
+                                <span class="lat-name">Comprehensive Dental Prophylaxis</span>
+                                <span class="lat-time">Annual Check</span>
+                            </div>
+                            <div class="lat-bar l-vdb">
+                                <span class="lat-name">Senior Blood Chemistry &amp; Urinalysis (&gt;7 yrs)</span>
+                                <span class="lat-time">Biannual</span>
+                            </div>
+                            <div class="lat-bar l-bm25">
+                                <span class="lat-name">Body Condition Scoring (BCS Target: 4.5/9)</span>
+                                <span class="lat-time">Monthly Weigh</span>
+                            </div>
+                            <div class="lat-bar l-rerank">
+                                <span class="lat-name">Core Vaccination &amp; Parasite Defense</span>
+                                <span class="lat-time">Strict Schedule</span>
+                            </div>
+                            <div class="lat-bar l-ttft">
+                                <span class="lat-name">Mental Agility &amp; Cognitive Fitness</span>
+                                <span class="lat-time">Daily Practice</span>
+                            </div>
+                        </div>
+                        <div class="sec-item">
+                            <strong>The Silent Epidemic of Dental Disease</strong>
+                            <p class="body-text small">
+                                Periodontal disease in dogs/cats and molar spur elongation in rabbits cause silent, chronic pain leading to renal, hepatic, and cardiovascular degeneration. Dental health is systemic health.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-inner highlight-border">
+                        <h3>The HHHHHMM Quality of Life Scale</h3>
+                        <p class="body-text">
+                            Developed by veterinary oncologist Dr. Alice Villalobos, this validated scoring system (0–10 per parameter; total &gt;35 indicates acceptable quality of life) guides compassionate end-of-life decision making:
+                        </p>
+                        <div class="triad-container">
+                            <div class="triad-card t-blue">
+                                <div class="triad-num">H</div>
+                                <div class="triad-body">
+                                    <strong>Hurt &amp; Hydration: Pain Control &amp; Fluid Balance</strong>
+                                    <p>Is pain managed effectively? Can the animal maintain normal hydration levels?</p>
+                                </div>
+                            </div>
+                            <div class="triad-card t-purple">
+                                <div class="triad-num">H</div>
+                                <div class="triad-body">
+                                    <strong>Hunger &amp; Hygiene: Self-Nourishment &amp; Cleanliness</strong>
+                                    <p>Is the animal eating willingly? Can they stay clean from waste and self-groom?</p>
+                                </div>
+                            </div>
+                            <div class="triad-card t-emerald">
+                                <div class="triad-num">M</div>
+                                <div class="triad-body">
+                                    <strong>Mobility &amp; More Good Days: Agency &amp; Joy</strong>
+                                    <p>Can the animal stand and explore? Do positive happy days outnumber suffering days?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="summary-conclusion">
+                            <strong>Ethical Compass:</strong> Euthanasia is the final act of compassionate guardianship—a selfless gift to prevent suffering when quality of life has irreversibly slipped away.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Bottom Controls -->
+    <footer class="bottom-bar">
+        <div class="slide-dots" id="dots-container">
+            <!-- Rendered dynamically by JS -->
+        </div>
+        <div class="hint-keys">
+            <span>Navigate:</span>
+            <span class="kbd">←</span>
+            <span class="kbd">→</span>
+            <span class="kbd">Space</span>
+            <span>or Drag</span>
+        </div>
+    </footer>
+
+    <!-- Three.js Visualizer: Organic Botanical/Constellation Background -->
+    <script>
+        /* -------------------------------------------------------------
+           1. THREE.JS 3D ORGANIC BOTANICAL CONSTELLATION
+        ------------------------------------------------------------- */
+        let scene, camera, renderer, pointsMesh, linesMesh;
+        let mouseX = 0, mouseY = 0;
+        let targetRotationX = 0, targetRotationY = 0;
+        let clock = new THREE.Clock();
+        const PARTICLE_COUNT = 850;
+        const CLUSTER_COUNT = 5;
+
+        // Organic Cluster Centers
+        const clusterCenters = [
+            new THREE.Vector3(-42, 22, -28),   // Cluster 0: Warm Amber
+            new THREE.Vector3(45, 26, -35),    // Cluster 1: Soft Honey
+            new THREE.Vector3(-32, -28, 22),   // Cluster 2: Muted Sage
+            new THREE.Vector3(38, -24, 28),    // Cluster 3: Warm Sand
+            new THREE.Vector3(0, 0, -45)       // Cluster 4: Creamy Off-White
+        ];
+
+        // Earth-toned warm palette: warm amber, soft honey, creamy off-white, muted olive/sage
+        const clusterColors = [
+            new THREE.Color(0xd97736), // Warm Amber / Terracotta
+            new THREE.Color(0xe0a96d), // Soft Honey
+            new THREE.Color(0x87a987), // Muted Sage / Olive
+            new THREE.Color(0xc9ada7), // Warm Sand / Clay
+            new THREE.Color(0xfdfbf7)  // Creamy Off-White
+        ];
+
+        function initThree() {
+            const canvas = document.getElementById('webgl-canvas');
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x121110, 0.007);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 110;
+
+            // Generate Organic Cluster Particles
+            const positions = new Float32Array(PARTICLE_COUNT * 3);
+            const originalPositions = new Float32Array(PARTICLE_COUNT * 3);
+            const colors = new Float32Array(PARTICLE_COUNT * 3);
+            const particleClusterMap = [];
+
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                const clusterIdx = Math.floor(Math.random() * CLUSTER_COUNT);
+                particleClusterMap.push(clusterIdx);
+                const center = clusterCenters[clusterIdx];
+                const col = clusterColors[clusterIdx];
+
+                const spread = 25;
+                const px = center.x + (Math.random() - 0.5) * spread * 2 + (Math.random() - 0.5) * 8;
+                const py = center.y + (Math.random() - 0.5) * spread * 2 + (Math.random() - 0.5) * 8;
+                const pz = center.z + (Math.random() - 0.5) * spread * 2 + (Math.random() - 0.5) * 8;
+
+                positions[i * 3] = px;
+                positions[i * 3 + 1] = py;
+                positions[i * 3 + 2] = pz;
+
+                originalPositions[i * 3] = px;
+                originalPositions[i * 3 + 1] = py;
+                originalPositions[i * 3 + 2] = pz;
+
+                // Subtle organic variation
+                const hsl = {};
+                col.getHSL(hsl);
+                const variedCol = new THREE.Color().setHSL(
+                    hsl.h + (Math.random() - 0.5) * 0.03,
+                    hsl.s * (0.85 + Math.random() * 0.25),
+                    hsl.l + (Math.random() - 0.5) * 0.12
+                );
+
+                colors[i * 3] = variedCol.r;
+                colors[i * 3 + 1] = variedCol.g;
+                colors[i * 3 + 2] = variedCol.b;
+            }
+
+            const particleGeo = new THREE.BufferGeometry();
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            particleGeo.userData = { originalPositions: originalPositions };
+
+            // Soft circular glow sprite (organic feel)
+            const canvasSprite = document.createElement('canvas');
+            canvasSprite.width = 32;
+            canvasSprite.height = 32;
+            const ctx = canvasSprite.getContext('2d');
+            const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+            grad.addColorStop(0, 'rgba(253, 251, 247, 1)');
+            grad.addColorStop(0.25, 'rgba(224, 169, 109, 0.7)');
+            grad.addColorStop(0.65, 'rgba(217, 119, 54, 0.14)');
+            grad.addColorStop(1, 'rgba(18, 17, 16, 0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 32, 32);
+
+            const spriteTexture = new THREE.CanvasTexture(canvasSprite);
+
+            const particleMat = new THREE.PointsMaterial({
+                size: 3.2,
+                vertexColors: true,
+                map: spriteTexture,
+                transparent: true,
+                opacity: 0.85,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+
+            pointsMesh = new THREE.Points(particleGeo, particleMat);
+            scene.add(pointsMesh);
+
+            // Construct Faint Delicate Organic Filament Lines
+            const linePositions = [];
+            const lineColors = [];
+            const MAX_LINE_DIST = 16;
+            const MAX_CONNECTIONS_PER_POINT = 2;
+
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                let connections = 0;
+                const p1 = new THREE.Vector3(positions[i*3], positions[i*3+1], positions[i*3+2]);
+                const c1 = particleClusterMap[i];
+
+                for (let j = i + 1; j < PARTICLE_COUNT; j++) {
+                    if (connections >= MAX_CONNECTIONS_PER_POINT) break;
+                    const c2 = particleClusterMap[j];
+
+                    if (c1 === c2 || Math.random() < 0.012) {
+                        const p2 = new THREE.Vector3(positions[j*3], positions[j*3+1], positions[j*3+2]);
+                        const dist = p1.distanceTo(p2);
+
+                        if (dist < MAX_LINE_DIST) {
+                            linePositions.push(p1.x, p1.y, p1.z);
+                            linePositions.push(p2.x, p2.y, p2.z);
+
+                            const col = clusterColors[c1];
+                            lineColors.push(col.r, col.g, col.b);
+                            lineColors.push(col.r, col.g, col.b);
+                            connections++;
+                        }
+                    }
+                }
+            }
+
+            const lineGeo = new THREE.BufferGeometry();
+            lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+            lineGeo.setAttribute('color', new THREE.Float32BufferAttribute(lineColors, 3));
+
+            const lineMat = new THREE.LineBasicMaterial({
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.14,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+
+            linesMesh = new THREE.LineSegments(lineGeo, lineMat);
+            scene.add(linesMesh);
+
+            // Note: Harsh tech grid helper removed for organic feel
+
+            // Event Listeners
+            window.addEventListener('resize', onWindowResize);
+            document.addEventListener('mousemove', onMouseMove);
+        }
+
+        function onWindowResize() {
+            if (!camera || !renderer) return;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onMouseMove(e) {
+            const halfW = window.innerWidth / 2;
+            const halfH = window.innerHeight / 2;
+            mouseX = (e.clientX - halfW) / halfW;
+            mouseY = (e.clientY - halfH) / halfH;
+            targetRotationY = mouseX * 0.38;
+            targetRotationX = mouseY * 0.28;
+        }
+
+        // Slide-reactive camera transitions
+        let targetCameraZ = 110;
+        let targetCameraX = 0;
+        let targetCameraY = 0;
+
+        function update3DForSlide(slideIdx) {
+            const angles = [
+                { x: 0, y: 0, z: 110 },        // 1. Holistic Welfare
+                { x: -24, y: 14, z: 96 },     // 2. Species Comparison
+                { x: -28, y: -18, z: 102 },   // 3. Canine Cognition
+                { x: 32, y: 18, z: 98 },      // 4. Senior Dog Care
+                { x: -14, y: 10, z: 118 },    // 5. Feline Territory
+                { x: 24, y: -14, z: 104 },    // 6. Lagomorph Nutrition & Hay
+                { x: 0, y: -24, z: 114 },     // 7. Safe Enclosures & Timber
+                { x: 18, y: 10, z: 102 },     // 8. Behavioral Enrichment
+                { x: -10, y: -6, z: 92 },     // 9. Multi-Pet Coexistence
+                { x: 0, y: 0, z: 122 }        // 10. Lifetime Care & Ethics
+            ];
+            const cfg = angles[(slideIdx - 1) % angles.length];
+            targetCameraX = cfg.x;
+            targetCameraY = cfg.y;
+            targetCameraZ = cfg.z;
+        }
+
+        function animateThree() {
+            requestAnimationFrame(animateThree);
+
+            const elapsedTime = clock.getElapsedTime();
+
+            // Gentle organic breathing motion
+            if (pointsMesh && linesMesh) {
+                pointsMesh.rotation.y += 0.0006;
+                linesMesh.rotation.y += 0.0006;
+
+                // Subtle vertical undulation
+                pointsMesh.position.y = Math.sin(elapsedTime * 0.5) * 1.5;
+                linesMesh.position.y = pointsMesh.position.y;
+
+                // Damped mouse smoothing lerp
+                pointsMesh.rotation.y += (targetRotationY - pointsMesh.rotation.y) * 0.025;
+                pointsMesh.rotation.x += (targetRotationX - pointsMesh.rotation.x) * 0.025;
+                linesMesh.rotation.y = pointsMesh.rotation.y;
+                linesMesh.rotation.x = pointsMesh.rotation.x;
+            }
+
+            // Camera lerp for slide navigation
+            camera.position.x += (targetCameraX - camera.position.x) * 0.035;
+            camera.position.y += (targetCameraY - camera.position.y) * 0.035;
+            camera.position.z += (targetCameraZ - camera.position.z) * 0.035;
+            camera.lookAt(0, 0, 0);
+
+            renderer.render(scene, camera);
+        }
+
+        /* -------------------------------------------------------------
+           2. SLIDE NAVIGATION & PRESENTATION CONTROLLER
+        ------------------------------------------------------------- */
+        let currentSlide = 1;
+        const totalSlides = 10;
+        const slides = document.querySelectorAll('.slide');
+        const currSlideNumEl = document.getElementById('curr-slide-num');
+        const progressBar = document.getElementById('progress-bar');
+        const dotsContainer = document.getElementById('dots-container');
+
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            for (let i = 1; i <= totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === 1 ? 'active' : ''}`;
+                dot.title = `Go to Slide ${i}`;
+                dot.addEventListener('click', () => goToSlide(i));
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function updatePresentationState() {
+            slides.forEach((s, idx) => {
+                if (idx + 1 === currentSlide) {
+                    s.classList.add('active');
+                } else {
+                    s.classList.remove('active');
+                }
+            });
+
+            // Update Slide Counter
+            currSlideNumEl.textContent = currentSlide < 10 ? `0${currentSlide}` : `${currentSlide}`;
+
+            // Update Progress Bar
+            const progress = (currentSlide / totalSlides) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Update Dots
+            const dots = dotsContainer.querySelectorAll('.dot');
+            dots.forEach((d, idx) => {
+                if (idx + 1 === currentSlide) {
+                    d.classList.add('active');
+                } else {
+                    d.classList.remove('active');
+                }
+            });
+
+            // Trigger 3D Camera Orbit
+            update3DForSlide(currentSlide);
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+            } else {
+                currentSlide = 1;
+            }
+            updatePresentationState();
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+            } else {
+                currentSlide = totalSlides;
+            }
+            updatePresentationState();
+        }
+
+        function goToSlide(n) {
+            if (n >= 1 && n <= totalSlides) {
+                currentSlide = n;
+                updatePresentationState();
+            }
+        }
+
+        // Keyboard Navigation Support
+        window.addEventListener('keydown', (e) => {
+            switch (e.code) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                case 'Space':
+                case 'PageDown':
+                    e.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                case 'PageUp':
+                    e.preventDefault();
+                    prevSlide();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    goToSlide(1);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    goToSlide(totalSlides);
+                    break;
+            }
+        });
+
+        // Button Controls
+        document.getElementById('btn-next').addEventListener('click', nextSlide);
+        document.getElementById('btn-prev').addEventListener('click', prevSlide);
+
+        // Touch Swipe Navigation for Tablets & Mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        window.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleGesture();
+        }, { passive: true });
+
+        function handleGesture() {
+            const diff = touchEndX - touchStartX;
+            if (Math.abs(diff) > 50) {
+                if (diff < 0) nextSlide();
+                else prevSlide();
+            }
+        }
+
+        // Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            initThree();
+            animateThree();
+            createDots();
+            updatePresentationState();
+        });
+    </script>
+</body>
+</html>
