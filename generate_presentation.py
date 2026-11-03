@@ -6,6 +6,7 @@ Enhanced with animated SVG animal illustrations, species silhouettes, and floati
 
 import sys
 from pathlib import Path
+from enrichment_calculator import CompanionEnrichmentCalculator
 
 
 def get_illustrations() -> dict[str, str]:
@@ -333,9 +334,12 @@ def get_illustrations() -> dict[str, str]:
 
 
 def build_presentation_html() -> str:
-    """Constructs the complete standalone HTML presentation with animated vector animal art."""
+    """Constructs the complete standalone HTML presentation with animated vector animal art and live Python calculations."""
 
     ill = get_illustrations()
+    calc = CompanionEnrichmentCalculator()
+    senior_calc_widget = calc.generate_html_card("senior_canine")
+    foraging_calc_widget = calc.generate_html_card("foraging_puzzle")
 
     slides_data = [
         {
@@ -344,6 +348,14 @@ def build_presentation_html() -> str:
             "title": "Holistic Companion Animal Care & Welfare",
             "subtitle": "From Basic Survival to Flourishing: Implementing the Modern Five Domains Welfare Model",
             "content": f"""
+            <div class="academic-hero-pill" style="display: flex; align-items: center; justify-content: space-between; background: rgba(35, 30, 26, 0.7); border: 1px solid rgba(214, 180, 150, 0.2); border-radius: 10px; padding: 10px 18px; margin-bottom: 20px;">
+                <div style="font-size: 0.85rem; color: #fdfbf7;">
+                    <strong>Academic Authors:</strong> Inbal Ohana (ענבל אהרה) &amp; Noy Shalev (נוי שלו)
+                </div>
+                <div style="font-size: 0.8rem; color: #e0a96d;">
+                    Generative AI, LLMs &amp; Agents &bull; Dr. Yoram Segal &bull; Bar-Ilan University
+                </div>
+            </div>
             <div class="grid-2col">
                 <div class="col">
                     <div class="card-inner">
@@ -608,6 +620,7 @@ def build_presentation_html() -> str:
                                 Replace strenuous agility walks with &quot;sniffaris&quot; (slow scent walks) and gentle, flat lick-mats to stimulate cognitive function without musculoskeletal strain.
                             </p>
                         </div>
+                        {senior_calc_widget}
                     </div>
                 </div>
             </div>
@@ -834,6 +847,7 @@ def build_presentation_html() -> str:
                             <span class="stat-lbl">Typical Bowl-Fed Eating Time</span>
                         </div>
                     </div>
+                    {foraging_calc_widget}
                 </div>
                 <div class="col">
                     <div class="card-inner">
@@ -1010,6 +1024,16 @@ def build_presentation_html() -> str:
                         </div>
                         <div class="summary-conclusion">
                             <strong>Ethical Compass:</strong> Euthanasia is the final act of compassionate guardianship—a selfless gift to prevent suffering when quality of life has irreversibly slipped away.
+                        </div>
+                        <div class="authors-footer-card" style="margin-top: 18px; padding: 12px 18px; background: rgba(35, 30, 26, 0.7); border: 1px solid rgba(217, 119, 54, 0.25); border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-size: 0.85rem; color: #fdfbf7; font-weight: 600;">Course Submission &bull; Bar-Ilan University</span>
+                                <span style="font-size: 0.8rem; color: #a89f91; display: block;">Dr. Yoram Segal | Generative AI, LLMs &amp; Autonomous Agents</span>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-size: 0.85rem; color: #e0a96d; font-weight: 600;">Inbal Ohana (ענבל אהרה) &amp; Noy Shalev (נוי שלו)</span>
+                                <span style="font-size: 0.75rem; color: #87a987; display: block;">Comprehensive Welfare, Nutrition &amp; Cognitive Architecture</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1990,7 +2014,7 @@ def build_presentation_html() -> str:
     <nav class="top-nav">
         <div class="brand">
             <div class="brand-dot"></div>
-            <span class="brand-text">Animal Welfare Masterclass // Canines, Felines &amp; Lagomorphs</span>
+            <span class="brand-text">Companion Animal Welfare &amp; Cognitive Enrichment // Inbal Ohana &amp; Noy Shalev &bull; BIU</span>
         </div>
         <div class="nav-controls">
             <button class="btn-nav" id="btn-prev" title="Previous Slide (← / ↑)">&#8592;</button>
@@ -2385,6 +2409,16 @@ def build_presentation_html() -> str:
 
         // Initialization
         window.addEventListener('DOMContentLoaded', () => {{
+            // Support URL parameter deep-linking e.g. ?slide=3 or #slide-3
+            const params = new URLSearchParams(window.location.search);
+            const slideParam = params.get('slide');
+            const hashMatch = window.location.hash.match(/slide-(\\d+)/);
+            if (slideParam) {{
+                currentSlide = Math.min(totalSlides, Math.max(1, parseInt(slideParam, 10) || 1));
+            }} else if (hashMatch) {{
+                currentSlide = Math.min(totalSlides, Math.max(1, parseInt(hashMatch[1], 10) || 1));
+            }}
+
             initThree();
             animateThree();
             createDots();
