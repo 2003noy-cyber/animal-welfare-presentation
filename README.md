@@ -8,7 +8,7 @@
 - **Institution**: Bar-Ilan University (BIU)
 - **Course Director / Lecturer**: Dr. Yoram Segal
 - **Project Authors / Students**:
-  - **Inbal Ohana** (ענבל אהרה)
+  - **Inbal Ehre** (ענבל אהרה)
   - **Noy Shalev** (נוי שלו)
 - **Topic**: Companion Animal Welfare, Nutrition & Cognitive Enrichment (Canines, Felines & Lagomorphs)
 - **Core Deliverables**:
@@ -52,7 +52,7 @@ The repository includes an automated 1080p capture utility (`capture_screenshots
 ![Masterclass Overview: Holistic Companion Animal Care & Welfare](screenshots/overview.png)
 
 > **Visual & Technical Architecture Caption:**
-> Slide 01 captured at 1920×1080. Demonstrates the **Three.js 3D WebGL organic botanical constellation** in the background: 850 warm amber, honey, sage, and off-white particles dynamically interconnected with delicate, low-opacity organic filaments reacting in real-time to cursor parallax. The central foreground features a warm glassmorphic card (`rgba(32, 28, 25, 0.82)` with `backdrop-filter: blur(28px)`), displaying the academic attribution banner (Inbal Ohana & Noy Shalev, Dr. Yoram Segal, Bar-Ilan University), the **Five Domains Welfare Framework**, and the hand-coded, animated SVG welfare triad wreath illustration (`float-gentle` and `pulse-path` keyframes).
+> Slide 01 captured at 1920×1080. Demonstrates the **Three.js 3D WebGL organic botanical constellation** in the background: 850 warm amber, honey, sage, and off-white particles dynamically interconnected with delicate, low-opacity organic filaments reacting in real-time to cursor parallax. The central foreground features a warm glassmorphic card (`rgba(32, 28, 25, 0.82)` with `backdrop-filter: blur(28px)`), displaying the academic attribution banner (Inbal Ehre & Noy Shalev, Dr. Yoram Segal, Bar-Ilan University), the **Five Domains Welfare Framework**, and the hand-coded, animated SVG welfare triad wreath illustration (`float-gentle` and `pulse-path` keyframes).
 
 ---
 
@@ -103,7 +103,7 @@ python enrichment_calculator.py --species canine --weight 25.0 --json
 ```text
 ==============================================================================
  COMPANION ANIMAL METABOLIC & COGNITIVE ENRICHMENT ENGINE DEMO
- Authors: Inbal Ohana (ענבל אהרה) & Noy Shalev (נוי שלו)
+ Authors: Inbal Ehre (ענבל אהרה) & Noy Shalev (נוי שלו)
  Course:  Generative AI, LLMs & Agents | Dr. Yoram Segal | Bar-Ilan University
 ==============================================================================
 
@@ -248,7 +248,7 @@ Start-Process msedge.exe "C:\biu01\presentation.html#slide-4"
 
 ```
 ├── Slide 01: Holistic Companion Animal Care & Welfare
-│   ├── Academic Project Attribution Banner (Inbal Ohana & Noy Shalev | Dr. Yoram Segal | BIU)
+│   ├── Academic Project Attribution Banner (Inbal Ehre & Noy Shalev | Dr. Yoram Segal | BIU)
 │   ├── Beyond the Five Freedoms: The Five Domains Model (Mellor et al.)
 │   ├── Cognitive agency and 80%+ chronic cortisol reduction
 │   └── The Triad of Species-Appropriate Guardianship
@@ -316,7 +316,7 @@ We evaluate this assignment submission at a score of **100 / 100** across all gr
 | **2. Domain Mastery & Intellectual Depth** | 20 | **20** | Replaced superficial overview with exhaustive clinical depth: the Five Domains Model, comparative nutrition (taurine, hindgut fermentation), multimodal osteoarthritis analgesia (anti-NGF biologicals), DISHA dementia diagnostics, GI stasis pathophysiology, wood toxicity chemistry, and the Villalobos HHHHHMM scale. |
 | **3. Interactive 3D WebGL & Visual Polish** | 20 | **20** | High-performance Three.js 3D organic botanical constellation with 850 particles, multi-species clustering, low-opacity organic filaments, damped parallax camera lerp, and slide-reactive camera transitions. Refined warm earth-toned glassmorphism palette and 10 hand-coded animated SVG species illustrations. |
 | **4. Architectural Rigor & Zero Dependencies** | 20 | **20** | Pure standard library implementation. Deterministic build pipeline (`generate_presentation.py` $\to$ `presentation.html`), automated 1080p headless Chromium screenshot capture (`capture_screenshots.py`), complete keyboard navigation, touch support, and URL deep linking (`#slide-N`). |
-| **5. Documentation, PRD & Prompt Engineering Archive** | 20 | **20** | Comprehensive `PRD.md` with full acceptance criteria. Prominent academic headers honoring Inbal Ohana, Noy Shalev, and Dr. Yoram Segal. Dedicated `prompts/` archive logging the complete prompt journey and technical decisions. Clean 5-stage progressive Git history. |
+| **5. Documentation, PRD & Prompt Engineering Archive** | 20 | **20** | Comprehensive `PRD.md` with full acceptance criteria. Prominent academic headers honoring Inbal Ehre, Noy Shalev, and Dr. Yoram Segal. Dedicated `prompts/` archive logging the complete prompt journey and technical decisions. Clean 5-stage progressive Git history. |
 | **TOTAL** | **100** | **100** | **Exemplary Submission strictly fulfilling every requirement.** |
 
 ---
@@ -342,4 +342,4 @@ C:\biu01\
 ---
 
 ## 📄 License & Attribution
-This project was created by **Inbal Ohana** (ענבל אהרה) and **Noy Shalev** (נוי שלו) for the *Generative AI, LLMs & Agents* course under the supervision of **Dr. Yoram Segal** at **Bar-Ilan University**. Released under the MIT License — open for academic, educational, and animal welfare advocacy use.
+This project was created by **Inbal Ehre** (ענבל אהרה) and **Noy Shalev** (נוי שלו) for the *Generative AI, LLMs & Agents* course under the supervision of **Dr. Yoram Segal** at **Bar-Ilan University**. Released under the MIT License — open for academic, educational, and animal welfare advocacy use.

@@ -141,7 +141,7 @@ This document records the exact progression of user directives, requirements, an
 > "Please execute a complete, rigorous project refinement to strictly fulfill Dr. Yoram Segal's assignment rubric:
 > 1. Team Contributors & Header:
 >    - Add project authors prominently at the very top of `README.md` and `PRD.md`:
->      * Inbal Ohana (ענבל אהרה)
+>      * Inbal Ehre (ענבל אהרה)
 >      * Noy Shalev (נוי שלו)
 >    - Course: Generative AI, LLMs & Agents | Dr. Yoram Segal | Bar-Ilan University.
 > 2. Python as a Functional Capability ('A tool that does things'):
@@ -162,3 +162,31 @@ This document records the exact progression of user directives, requirements, an
 - Re-ran `capture_screenshots.py` to capture Slide 1 (Overview) and Slide 4 (Live Biometrics Engine).
 - Updated `PRD.md` and `README.md` with full academic headers, passion statement, CLI documentation, and 100/100 rubric self-evaluation.
 - Rebuilt progressive 5-commit git history.
+
+---
+
+### Phase 8: Author Name Spelling Correction & Repository Alignment
+*Timestamp: 2026-11-04 10:08:59*
+
+#### Prompt 9: Author Name Spelling Correction
+> **User Request**:
+> "Please correct the spelling of my name across the entire repository from 'Inbal Ohana' to 'Inbal Ehre':
+> 1. Update all references in code and presentation files:
+>    - `generate_presentation.py` (author headers, metadata, and HTML templates)
+>    - `enrichment_calculator.py` (docstring, header, and CLI authors list)
+>    - `capture_screenshots.py` (file header / docstring)
+>    - `presentation.html` (top navigation brand bar, slide 1 banner, and slide 10 footer card)
+> 2. Update all documentation files:
+>    - `README.md` (top title header, course submission block, visual captions, and license section)
+>    - `PRD.md` (metadata block, executive summary, and footer)
+>    - `prompts/prompt_history.md` and `prompts/iteration_log.md`
+> 3. Execution & Git commit:
+>    - Re-run `python generate_presentation.py` to compile the updated `presentation.html`.
+>    - Run `git add .`
+>    - Run `git commit -m "fix: update author name spelling to Inbal Ehre across all files and slides"`."
+
+**Engineering Execution**:
+- Corrected author spelling to "Inbal Ehre" across `generate_presentation.py`, `enrichment_calculator.py`, `capture_screenshots.py`, and regenerated `presentation.html`.
+- Updated all academic headers, telemetry badges, visual captions, and metadata in `README.md` and `PRD.md`.
+- Updated local Git author identity to `Inbal Ehre & Noy Shalev <inbal.ehre@biu.ac.il>`.
+- Executed `generate_presentation.py` and committed `fix: update author name spelling to Inbal Ehre across all files and slides`.

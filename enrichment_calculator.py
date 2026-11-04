@@ -3,7 +3,7 @@
 ===============================================================================
 Companion Animal Enrichment & Metabolic Calculator
 ===============================================================================
-Authors: Inbal Ohana (ענבל אהרה) & Noy Shalev (נוי שלו)
+Authors: Inbal Ehre (ענבל אהרה) & Noy Shalev (נוי שלו)
 Course:  Generative AI, LLMs & Agents | Dr. Yoram Segal | Bar-Ilan University
 Topic:   Companion Animal Welfare, Nutrition & Cognitive Enrichment
 ===============================================================================
@@ -348,7 +348,7 @@ def main():
     if args.demo:
         print("\n" + "=" * 78)
         print(" COMPANION ANIMAL METABOLIC & COGNITIVE ENRICHMENT ENGINE DEMO")
-        print(" Authors: Inbal Ohana (ענבל אהרה) & Noy Shalev (נוי שלו)")
+        print(" Authors: Inbal Ehre (ענבל אהרה) & Noy Shalev (נוי שלו)")
         print(" Course:  Generative AI, LLMs & Agents | Dr. Yoram Segal | Bar-Ilan University")
         print("=" * 78 + "\n")
 
@@ -389,7 +389,7 @@ def main():
     forage_res = calculator.calculate_cognitive_foraging(args.weight, args.species, args.stage, args.tier)
 
     combined = {
-        "authors": ["Inbal Ohana (ענבל אהרה)", "Noy Shalev (נוי שלו)"],
+        "authors": ["Inbal Ehre (ענבל אהרה)", "Noy Shalev (נוי שלו)"],
         "institution": "Bar-Ilan University | Dr. Yoram Segal",
         "inputs": vars(args),
         "metabolic": mer_res,

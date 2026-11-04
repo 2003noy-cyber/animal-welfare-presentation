@@ -7,7 +7,7 @@
 - **Faculty / Institution**: Bar-Ilan University (BIU)
 - **Instructor**: Dr. Yoram Segal
 - **Authors**:
-  - **Inbal Ohana** (ענבל אהרה)
+  - **Inbal Ehre** (ענבל אהרה)
   - **Noy Shalev** (נוי שלו)
 - **Topic**: Companion Animal Welfare, Nutrition & Cognitive Enrichment (Canines, Felines & Lagomorphs)
 - **Repository Artifacts**: `enrichment_calculator.py`, `generate_presentation.py`, `presentation.html`, `capture_screenshots.py`, `PRD.md`, `README.md`, `prompts/`, `screenshots/`
@@ -80,7 +80,7 @@ To satisfy the rubric requirement of Python as a functional tool ("a tool that d
   - The Five Domains Model: Nutrition, Physical Environment, Health, Behavioral Interactions, and Positive Mental State.
   - Cognitive Agency & Stress Reduction: Demonstrating that perceived control over environment reduces chronic cortisol levels by $>80\%$.
   - The Triad of Species-Appropriate Guardianship: Biological integrity $\to$ Environmental sanctuary $\to$ Cognitive agency $\to$ Interspecies trust $\to$ Flourishing longevity.
-  - Prominent Academic Project Banner: Inbal Ohana & Noy Shalev, Dr. Yoram Segal, Bar-Ilan University.
+  - Prominent Academic Project Banner: Inbal Ehre & Noy Shalev, Dr. Yoram Segal, Bar-Ilan University.
 - **Visuals**: Animated botanical wreath SVG framing line-art dog, cat, and rabbit with central pulsing welfare heart; 5-step holistic care pipeline; welfare metric telemetry badges.
 
 #### Slide 2: Species-Specific Needs: Dogs vs. Cats vs. Rabbits
@@ -183,7 +183,7 @@ To satisfy the rubric requirement of Python as a functional tool ("a tool that d
   - The Silent Threat of Periodontal Disease: Chronic oral inflammation as a primary driver of renal, hepatic, and cardiovascular deterioration.
   - The **HHHHHMM Quality of Life Scale** (Dr. Alice Villalobos): Hurt, Hunger, Hydration, Hygiene, Happiness, Mobility, More Good Days.
   - The Ethical Covenant: Euthanasia as the ultimate selfless act of compassionate guardianship.
-  - Final Academic Project Footer: Inbal Ohana & Noy Shalev, Bar-Ilan University, Dr. Yoram Segal.
+  - Final Academic Project Footer: Inbal Ehre & Noy Shalev, Bar-Ilan University, Dr. Yoram Segal.
 - **Visuals**: Caring cupped hands cradling a covenant heart with multi-species paw prints and laurel sprigs; HHHHHMM scoring triad; project attribution card.
 
 ---

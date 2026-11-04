@@ -105,6 +105,19 @@ This document provides a technical post-mortem and iterative change log detailin
 
 ---
 
+### Iteration 8: Author Name Spelling Correction & Repository Alignment
+- **Objective**: Standardize and correct author name spelling across all code, presentation, and documentation files to **Inbal Ehre** (ענבל אהרה).
+- **Files Synchronized**:
+  - `generate_presentation.py`: Updated module docstring, Slide 1 academic hero banner, Slide 10 footer card, and top-navigation brand bar.
+  - `enrichment_calculator.py`: Updated header docstring, `--demo` banner, and `--json` dictionary output.
+  - `capture_screenshots.py`: Added full module docstring with authors and Bar-Ilan University course attribution.
+  - `presentation.html`: Recompiled with `python generate_presentation.py` ensuring all embedded HTML strings reflect `Inbal Ehre`.
+  - `README.md` & `PRD.md`: Updated authors list, visual captions, syllabus references, and license attribution.
+  - `prompts/`: Synchronized `prompt_history.md` and `iteration_log.md`.
+- **Git Author Identity**: Configured local git user to `Inbal Ehre & Noy Shalev <inbal.ehre@biu.ac.il>`.
+
+---
+
 ## 📊 Summary of Artifact Metrics
 
 | Metric | Target | Final Measurement | Status |

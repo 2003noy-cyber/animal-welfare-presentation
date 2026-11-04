@@ -1,6 +1,8 @@
 """
 Presentation Generator Script: Companion Animal Welfare, Nutrition & Cognitive Enrichment
 (Canines, Felines & Lagomorphs)
+Authors: Inbal Ehre (ענבל אהרה) & Noy Shalev (נוי שלו)
+Course:  Generative AI, LLMs & Agents | Dr. Yoram Segal | Bar-Ilan University
 Enhanced with animated SVG animal illustrations, species silhouettes, and floating vector motifs.
 """
 
@@ -350,7 +352,7 @@ def build_presentation_html() -> str:
             "content": f"""
             <div class="academic-hero-pill" style="display: flex; align-items: center; justify-content: space-between; background: rgba(35, 30, 26, 0.7); border: 1px solid rgba(214, 180, 150, 0.2); border-radius: 10px; padding: 10px 18px; margin-bottom: 20px;">
                 <div style="font-size: 0.85rem; color: #fdfbf7;">
-                    <strong>Academic Authors:</strong> Inbal Ohana (ענבל אהרה) &amp; Noy Shalev (נוי שלו)
+                    <strong>Academic Authors:</strong> Inbal Ehre (ענבל אהרה) &amp; Noy Shalev (נוי שלו)
                 </div>
                 <div style="font-size: 0.8rem; color: #e0a96d;">
                     Generative AI, LLMs &amp; Agents &bull; Dr. Yoram Segal &bull; Bar-Ilan University
@@ -1031,7 +1033,7 @@ def build_presentation_html() -> str:
                                 <span style="font-size: 0.8rem; color: #a89f91; display: block;">Dr. Yoram Segal | Generative AI, LLMs &amp; Autonomous Agents</span>
                             </div>
                             <div style="text-align: right;">
-                                <span style="font-size: 0.85rem; color: #e0a96d; font-weight: 600;">Inbal Ohana (ענבל אהרה) &amp; Noy Shalev (נוי שלו)</span>
+                                <span style="font-size: 0.85rem; color: #e0a96d; font-weight: 600;">Inbal Ehre (ענבל אהרה) &amp; Noy Shalev (נוי שלו)</span>
                                 <span style="font-size: 0.75rem; color: #87a987; display: block;">Comprehensive Welfare, Nutrition &amp; Cognitive Architecture</span>
                             </div>
                         </div>
@@ -2014,7 +2016,7 @@ def build_presentation_html() -> str:
     <nav class="top-nav">
         <div class="brand">
             <div class="brand-dot"></div>
-            <span class="brand-text">Companion Animal Welfare &amp; Cognitive Enrichment // Inbal Ohana &amp; Noy Shalev &bull; BIU</span>
+            <span class="brand-text">Companion Animal Welfare &amp; Cognitive Enrichment // Inbal Ehre &amp; Noy Shalev &bull; BIU</span>
         </div>
         <div class="nav-controls">
             <button class="btn-nav" id="btn-prev" title="Previous Slide (← / ↑)">&#8592;</button>

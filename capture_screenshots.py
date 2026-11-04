@@ -1,5 +1,8 @@
 """
 Automated Screenshot Capture Utility for Companion Animal Welfare Presentation.
+Authors: Inbal Ehre (ענבל אהרה) & Noy Shalev (נוי שלו)
+Course:  Generative AI, LLMs & Agents | Dr. Yoram Segal | Bar-Ilan University
+
 Captures high-resolution 1920x1080 viewport screenshots of presentation slides
 using headless Chromium (Microsoft Edge) with unique temporary profiles.
 """
