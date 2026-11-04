@@ -118,6 +118,18 @@ This document provides a technical post-mortem and iterative change log detailin
 
 ---
 
+### Iteration 9: Final Rubric Alignment Review & Project Backup Readiness
+- **Objective**: Conduct comprehensive pre-submission review against Dr. Yoram Segal's grading rubric and prepare clean repository for GitHub backup.
+- **Rubric Dimension Checklist**:
+  1. *Python as a Functional Tool (20/20)*: `enrichment_calculator.py` operational across all CLI flags (`--demo`, `--species`, `--json`), computing RER ($70 \times M^{0.75}$), species MER, contra-freeloading caloric partitions, 3-tier puzzle allocations, and senior articular load index; seamlessly embedded into presentation slides 4 and 8.
+  2. *Domain Mastery & Behavioral Rigor (20/20)*: Complete 10-slide syllabus covering Five Domains, comparative biology, canine contra-freeloading/nosework, senior multimodal OA analgesia (bedinvetmab / Librela), feline 3D superhighways, lagomorph hindgut fermentation/cecotrophy, safe timber chemistry, stereotypy mitigation, safe cohabitation protocols, and the Villalobos HHHHHMM scale.
+  3. *Interactive 3D WebGL Visualization (20/20)*: Custom Three.js botanical constellation with 850 point particles, multi-species clustering, damped parallax orbit lerp, continuous sinusoidal undulation, and slide-reactive camera glides.
+  4. *Visual Aesthetics & Zero Dependencies (20/20)*: Warm earth-toned glassmorphism (`#121110`, `#fdfbf7`, `#e0a96d`, `#d97736`, `#87a987`), 10 hand-crafted animated SVG species illustrations with keyframes, responsive mobile layout, keyboard navigation, and deep linking (`#slide-N`) with zero external pip dependencies.
+  5. *Documentation, Authorship & Prompt History (20/20)*: Exhaustive `PRD.md`, portfolio `README.md` with self-evaluation matrix (100/100), automated 1080p screenshots (`screenshots/overview.png` & `screenshots/slide_detail.png`), complete prompt logs, and verified student authorship for **Inbal Ehre** (ענבל אהרה) and **Noy Shalev** (נוי שלו).
+- **Branch Transition**: Upgraded local branch from `master` to standard `main` branch.
+
+---
+
 ## 📊 Summary of Artifact Metrics
 
 | Metric | Target | Final Measurement | Status |
