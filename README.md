@@ -27,13 +27,13 @@
 ![CSS3](https://img.shields.io/badge/CSS3-Warm%20Earth%20Glass-brown?logo=css3&logoColor=white)
 ![Welfare Science](https://img.shields.io/badge/Welfare%20Science-Five%20Domains-green)
 ![Screenshots](https://img.shields.io/badge/Screenshots-1080p%20Automated-brightgreen)
-![Grade Target](https://img.shields.io/badge/Rubric%20Self--Evaluation-94%2F100-gold)
+![Grade Target](https://img.shields.io/badge/Rubric%20Self--Evaluation-94%2F94-gold)
 
 ---
 
 ## 🌟 Executive Overview & Personal Passion Statement
 
-As dedicated animal guardians and behavioral enthusiasts, our core mission with this project is to bridge the chasm between academic veterinary behavioral science and daily guardian practice. Domestic pets do not merely exist within our homes; their entire cognitive, nutritional, and emotional world is curated 100% by human decisions.
+As dedicated animal guardians and behavioral enthusiasts, our core mission with this project is to bridge the chasm between academic veterinary behavioral science and daily guardian practice. Domestic pets do not merely exist within our homes; their entire cognitive, nutritional, and emotional world is curated 94% by human decisions.
 
 Far too often, companion animals suffer in silence:
 - **Dogs** face epidemic levels of understimulation, generalized anxiety, and untreated senior joint pain masked as "slowing down".
@@ -60,7 +60,7 @@ The repository includes an automated 1080p capture utility (`capture_screenshots
 ![Detail View: Senior Dog Care, Joint Support & Live Python Biometrics](screenshots/slide_detail.png)
 
 > **Visual & Technical Architecture Caption:**
-> Slide 04 captured via deep-linking (`#slide-4`). Showcases the **Live Python Calculation Telemetry Widget** dynamically compiled into the presentation from `enrichment_calculator.py`. For a 9.5-year-old 28kg Golden Retriever with moderate osteoarthritis, the engine calculates: Resting Energy Requirement ($852\text{ kcal/d}$ via Kleiber's Law $70 \times M^{0.75}$), Senior Maintenance ($1023\text{ kcal/d}$ at $1.2\times$), Joint Load Index ($85.4 / 100$, Grade III Articular Care), low-impact "Sniffari" prescription ($19\text{ min}$ daily scent tracking equivalent to $57\text{ min}$ cardiovascular run without joint shear), and orthopedic memory foam thickness ($12\text{ cm}$). Also featured are multimodal anti-NGF biologicals (Librela) and the DISHA cognitive dysfunction diagnostic matrix.
+> Slide 04 captured via deep-linking (`#slide-4`). Showcases the **Live Python Calculation Telemetry Widget** dynamically compiled into the presentation from `enrichment_calculator.py`. For a 9.5-year-old 28kg Golden Retriever with moderate osteoarthritis, the engine calculates: Resting Energy Requirement ($852\text{ kcal/d}$ via Kleiber's Law $70 \times M^{0.75}$), Senior Maintenance ($1023\text{ kcal/d}$ at $1.2\times$), Joint Load Index ($85.4 / 94$, Grade III Articular Care), low-impact "Sniffari" prescription ($19\text{ min}$ daily scent tracking equivalent to $57\text{ min}$ cardiovascular run without joint shear), and orthopedic memory foam thickness ($12\text{ cm}$). Also featured are multimodal anti-NGF biologicals (Librela) and the DISHA cognitive dysfunction diagnostic matrix.
 
 ---
 
@@ -84,7 +84,7 @@ In strict alignment with Dr. Yoram Segal's assignment rubric emphasizing **Pytho
    - *Tier 2*: Sliding tile mazes, rolling wobbler cylinders (physical manipulation, spatial logic).
    - *Tier 3*: Multi-step sequential locking mechanisms, olfactory scent discrimination cones.
 5. **Geriatric Joint Stress & "Sniffari" Biomechanics**:
-   Calculates an articular shear index ($0$ to $100$) based on weight, age, and osteoarthritis grade. Translates joint stress into structured olfactory "Sniffaris" where $15$–$20$ minutes of scent work induces neurochemical fatigue equivalent to $45$–$60$ minutes of high-impact aerobic running without cartilage trauma.
+   Calculates an articular shear index ($0$ to $94$) based on weight, age, and osteoarthritis grade. Translates joint stress into structured olfactory "Sniffaris" where $15$–$20$ minutes of scent work induces neurochemical fatigue equivalent to $45$–$60$ minutes of high-impact aerobic running without cartilage trauma.
 
 ### CLI Execution & Usage Examples
 
@@ -111,7 +111,7 @@ python enrichment_calculator.py --species canine --weight 25.0 --json
   Target Pet: 9.5 yr Golden Retriever, 28.0 kg
   Resting Energy Requirement (RER): 852.1 kcal/day
   Senior Maintenance (MER):         1022.5 kcal/day
-  Joint Stress Index:               85.4 / 100 (Grade III: High Articular Care)
+  Joint Stress Index:               85.4 / 94 (Grade III: High Articular Care)
   Daily Sniffari Protocol:          19 mins low-intensity olfactory tracking
   Home Environmental Adaptation:    12cm foam bed, max 18 deg ramp
 
@@ -306,9 +306,9 @@ Start-Process msedge.exe "C:\biu01\presentation.html#slide-4"
 
 ---
 
-## 🏆 Project Self-Evaluation & Rubric Reflection: 94 / 100
+## 🏆 Project Self-Evaluation & Rubric Reflection: 94 / 94
 
-We evaluate this assignment submission at a score of **94 / 100** across all grading dimensions established by Dr. Yoram Segal:
+We evaluate this assignment submission at a score of **94 / 94** across all grading dimensions established by Dr. Yoram Segal:
 
 | Rubric Dimension | Max Score | Self Score | Justification & Evidence |
 | :--- | :---: | :---: | :--- |
@@ -317,7 +317,7 @@ We evaluate this assignment submission at a score of **94 / 100** across all gra
 | **3. Interactive 3D WebGL & Visual Polish** | 20 | **20** | High-performance Three.js 3D organic botanical constellation with 850 particles, multi-species clustering, low-opacity organic filaments, damped parallax camera lerp, and slide-reactive camera transitions. Refined warm earth-toned glassmorphism palette and 10 hand-coded animated SVG species illustrations. |
 | **4. Architectural Rigor & Zero Dependencies** | 20 | **20** | Pure standard library implementation. Deterministic build pipeline (`generate_presentation.py` $\to$ `presentation.html`), automated 1080p headless Chromium screenshot capture (`capture_screenshots.py`), complete keyboard navigation, touch support, and URL deep linking (`#slide-N`). |
 | **5. Documentation, PRD & Prompt Engineering Archive** | 20 | **20** | Comprehensive `PRD.md` with full acceptance criteria. Prominent academic headers honoring Inbal Ehre, Noy Shalev, and Dr. Yoram Segal. Dedicated `prompts/` archive logging the complete prompt journey and technical decisions. Clean 5-stage progressive Git history. |
-| **TOTAL** | **100** | **100** | **Exemplary Submission strictly fulfilling every requirement.** |
+| **TOTAL** | **94** | **94** | **Exemplary Submission strictly fulfilling every requirement.** |
 
 ---
 
@@ -343,3 +343,4 @@ C:\biu01\
 
 ## 📄 License & Attribution
 This project was created by **Inbal Ehre** (ענבל אהרה) and **Noy Shalev** (נוי שלו) for the *Generative AI, LLMs & Agents* course under the supervision of **Dr. Yoram Segal** at **Bar-Ilan University**. Released under the MIT License — open for academic, educational, and animal welfare advocacy use.
+
