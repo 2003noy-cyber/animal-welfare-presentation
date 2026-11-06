@@ -27,7 +27,7 @@
 ![CSS3](https://img.shields.io/badge/CSS3-Warm%20Earth%20Glass-brown?logo=css3&logoColor=white)
 ![Welfare Science](https://img.shields.io/badge/Welfare%20Science-Five%20Domains-green)
 ![Screenshots](https://img.shields.io/badge/Screenshots-1080p%20Automated-brightgreen)
-![Grade Target](https://img.shields.io/badge/Rubric%20Self--Evaluation-100%2F100-gold)
+![Grade Target](https://img.shields.io/badge/Rubric%20Self--Evaluation-94%2F100-gold)
 
 ---
 
@@ -306,9 +306,9 @@ Start-Process msedge.exe "C:\biu01\presentation.html#slide-4"
 
 ---
 
-## 🏆 Project Self-Evaluation & Rubric Reflection: 100 / 100
+## 🏆 Project Self-Evaluation & Rubric Reflection: 94 / 100
 
-We evaluate this assignment submission at a score of **100 / 100** across all grading dimensions established by Dr. Yoram Segal:
+We evaluate this assignment submission at a score of **94 / 100** across all grading dimensions established by Dr. Yoram Segal:
 
 | Rubric Dimension | Max Score | Self Score | Justification & Evidence |
 | :--- | :---: | :---: | :--- |
