@@ -2500,5 +2500,6 @@
             updatePresentationState();
         });
     </script>
-</body>
+<style>#rabbit{position:fixed;bottom:30px;right:-150px;font-size:5rem;z-index:9999;pointer-events:none;}</style><div id="rabbit">🐇</div><script>function jump(){let r=document.getElementById("rabbit");if(r){r.style.transition="none";r.style.right="-150px";setTimeout(()=>{r.style.transition="right 3.5s ease-in-out";r.style.right="110vw";},50);}} document.addEventListener("click",jump); document.addEventListener("keydown",(e)=>{if(["ArrowRight","ArrowLeft","Space","ArrowUp","ArrowDown","PageDown","PageUp"].includes(e.code))jump();});</script></body>
 </html>
+
