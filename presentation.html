@@ -66,6 +66,17 @@
             pointer-events: none;
         }
 
+        /* 3D Rabbit Fixed Overlay Layer */
+        #rabbit-overlay-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
         /* Top Progress Bar */
         #progress-bar-container {
             position: fixed;
@@ -935,6 +946,9 @@
 
     <!-- Three.js 3D Background Canvas -->
     <canvas id="webgl-canvas"></canvas>
+
+    <!-- 3D Rabbit Persistent Fixed Overlay Canvas -->
+    <canvas id="rabbit-overlay-canvas"></canvas>
 
     <!-- Top Progress Bar -->
     <div id="progress-bar-container">
@@ -2498,8 +2512,451 @@
             animateThree();
             createDots();
             updatePresentationState();
+            initRabbitOverlay();
         });
+
+        /* -------------------------------------------------------------
+           3. PERSISTENT 3D FREE-ROAMING RABBIT MASCOT OVERLAY
+        ------------------------------------------------------------- */
+        let rabbitRenderer, rabbitScene, rabbitCamera;
+        let rabbitRootGroup, rabbitYawGroup, rabbitJumpGroup, rabbitRunGroup;
+        let headGroup, leftEarPivot, rightEarPivot;
+        let frontLeftLegPivot, frontRightLegPivot, backLeftLegPivot, backRightLegPivot;
+        let tailMesh;
+        const rabbitRaycaster = new THREE.Raycaster();
+        const rabbitMouseNDC = new THREE.Vector2();
+        const groundPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        const rabbitClock = new THREE.Clock();
+
+        const rabbitState = {
+            screenX: window.innerWidth * 0.45,
+            screenY: window.innerHeight * 0.65,
+            heading: 0,
+            targetHeading: 0,
+            speed: 135,          // screen pixels per second
+            turnSpeed: 3.4,      // rad/s for smooth natural turning
+            changeTimer: 2.5,
+            isJumping: false,
+            jumpTimer: 0,
+            jumpDuration: 0.72,
+            jumpPeak: 52,        // 3D units altitude
+            squashTimer: 0,
+            runCycle: 0
+        };
+
+        function initRabbitOverlay() {
+            const canvas = document.getElementById('rabbit-overlay-canvas');
+            if (!canvas) return;
+
+            rabbitRenderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                alpha: true,
+                antialias: true,
+                powerPreference: 'high-performance'
+            });
+            rabbitRenderer.setSize(window.innerWidth, window.innerHeight);
+            rabbitRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            rabbitScene = new THREE.Scene();
+
+            // Perspective camera looking slightly downwards at the screen plane Z = 0
+            rabbitCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 10, 3000);
+            rabbitCamera.position.set(0, -240, 600);
+            rabbitCamera.lookAt(0, 0, 0);
+
+            // Lighting setup for warm, soft 3D shading matching presentation palette
+            const ambientLight = new THREE.AmbientLight(0xfff6ee, 0.85);
+            rabbitScene.add(ambientLight);
+
+            const sunLight = new THREE.DirectionalLight(0xffeedd, 0.9);
+            sunLight.position.set(220, -260, 450);
+            rabbitScene.add(sunLight);
+
+            const fillLight = new THREE.DirectionalLight(0xdbe6f5, 0.4);
+            fillLight.position.set(-220, 260, 250);
+            rabbitScene.add(fillLight);
+
+            // Materials
+            const furMat = new THREE.MeshStandardMaterial({
+                color: 0xfdfaf6,
+                roughness: 0.62,
+                metalness: 0.05
+            });
+            const muzzleMat = new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                roughness: 0.68,
+                metalness: 0.02
+            });
+            const pinkMat = new THREE.MeshStandardMaterial({
+                color: 0xf4a494,
+                roughness: 0.5,
+                metalness: 0.05
+            });
+            const eyeMat = new THREE.MeshStandardMaterial({
+                color: 0x140e0a,
+                roughness: 0.1,
+                metalness: 0.9
+            });
+            const glintMat = new THREE.MeshBasicMaterial({
+                color: 0xffffff
+            });
+            const tailMat = new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                roughness: 0.85,
+                metalness: 0.0
+            });
+
+            // Model hierarchy
+            rabbitRootGroup = new THREE.Group();
+            rabbitYawGroup = new THREE.Group();
+            rabbitJumpGroup = new THREE.Group();
+            rabbitRunGroup = new THREE.Group();
+
+            rabbitScene.add(rabbitRootGroup);
+            rabbitRootGroup.add(rabbitYawGroup);
+            rabbitYawGroup.add(rabbitJumpGroup);
+            rabbitJumpGroup.add(rabbitRunGroup);
+
+            // 1. Torso / Body
+            const bodyGeo = new THREE.SphereGeometry(13.5, 20, 16);
+            bodyGeo.scale(1.22, 0.9, 0.95);
+            const bodyMesh = new THREE.Mesh(bodyGeo, furMat);
+            bodyMesh.position.set(0, 0, 13);
+            rabbitRunGroup.add(bodyMesh);
+
+            // 2. Chest & Shoulders
+            const chestGeo = new THREE.SphereGeometry(9.5, 16, 14);
+            chestGeo.scale(1.0, 0.85, 0.9);
+            const chestMesh = new THREE.Mesh(chestGeo, furMat);
+            chestMesh.position.set(8.5, 0, 15);
+            rabbitRunGroup.add(chestMesh);
+
+            // 3. Head & Features
+            headGroup = new THREE.Group();
+            headGroup.position.set(16, 0, 18.5);
+
+            const headGeo = new THREE.SphereGeometry(9.0, 18, 16);
+            headGeo.scale(1.05, 0.95, 1.0);
+            const headMesh = new THREE.Mesh(headGeo, furMat);
+            headGroup.add(headMesh);
+
+            const snoutGeo = new THREE.SphereGeometry(5.2, 14, 12);
+            snoutGeo.scale(1.15, 1.0, 0.8);
+            const snoutMesh = new THREE.Mesh(snoutGeo, muzzleMat);
+            snoutMesh.position.set(6, 0, -2);
+            headGroup.add(snoutMesh);
+
+            const noseGeo = new THREE.SphereGeometry(1.6, 12, 10);
+            const noseMesh = new THREE.Mesh(noseGeo, pinkMat);
+            noseMesh.position.set(11.2, 0, -1);
+            headGroup.add(noseMesh);
+
+            const eyeGeo = new THREE.SphereGeometry(1.6, 12, 10);
+            const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+            leftEye.position.set(5.2, 5.8, 2.5);
+            const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+            rightEye.position.set(5.2, -5.8, 2.5);
+
+            const glintGeo = new THREE.SphereGeometry(0.5, 8, 8);
+            const leftGlint = new THREE.Mesh(glintGeo, glintMat);
+            leftGlint.position.set(6.0, 6.4, 3.2);
+            const rightGlint = new THREE.Mesh(glintGeo, glintMat);
+            rightGlint.position.set(6.0, -6.4, 3.2);
+            headGroup.add(leftEye, rightEye, leftGlint, rightGlint);
+
+            // Ears
+            const earGeo = new THREE.CylinderGeometry(2.3, 1.4, 18, 14);
+            earGeo.rotateX(Math.PI / 2);
+            earGeo.translate(0, 0, 9);
+            earGeo.scale(0.8, 0.35, 1.0);
+
+            const innerEarGeo = new THREE.CylinderGeometry(1.7, 0.9, 15, 12);
+            innerEarGeo.rotateX(Math.PI / 2);
+            innerEarGeo.translate(0, 0.4, 8);
+            innerEarGeo.scale(0.7, 0.22, 1.0);
+
+            leftEarPivot = new THREE.Group();
+            leftEarPivot.position.set(-1.5, 3.8, 7.5);
+            leftEarPivot.rotation.set(0.12, -0.2, 0.08);
+            const leftOuterEar = new THREE.Mesh(earGeo, furMat);
+            const leftInnerEar = new THREE.Mesh(innerEarGeo, pinkMat);
+            leftEarPivot.add(leftOuterEar, leftInnerEar);
+            headGroup.add(leftEarPivot);
+
+            rightEarPivot = new THREE.Group();
+            rightEarPivot.position.set(-1.5, -3.8, 7.5);
+            rightEarPivot.rotation.set(-0.12, -0.2, -0.08);
+            const rightOuterEar = new THREE.Mesh(earGeo.clone(), furMat);
+            const rightInnerEar = new THREE.Mesh(innerEarGeo.clone(), pinkMat);
+            rightEarPivot.add(rightOuterEar, rightInnerEar);
+            headGroup.add(rightEarPivot);
+
+            rabbitRunGroup.add(headGroup);
+
+            // 4. Front Legs
+            const fLegGeo = new THREE.CylinderGeometry(2.0, 1.5, 10, 10);
+            fLegGeo.rotateX(Math.PI / 2);
+            fLegGeo.translate(0, 0, -5);
+
+            const fPawGeo = new THREE.SphereGeometry(2.0, 10, 8);
+            fPawGeo.scale(1.4, 1.0, 0.7);
+            fPawGeo.translate(1.2, 0, -10.2);
+
+            frontLeftLegPivot = new THREE.Group();
+            frontLeftLegPivot.position.set(7.5, 6.0, 10.0);
+            const fLegMeshL = new THREE.Mesh(fLegGeo, furMat);
+            const fPawMeshL = new THREE.Mesh(fPawGeo, furMat);
+            frontLeftLegPivot.add(fLegMeshL, fPawMeshL);
+            rabbitRunGroup.add(frontLeftLegPivot);
+
+            frontRightLegPivot = new THREE.Group();
+            frontRightLegPivot.position.set(7.5, -6.0, 10.0);
+            const fLegMeshR = new THREE.Mesh(fLegGeo.clone(), furMat);
+            const fPawMeshR = new THREE.Mesh(fPawGeo.clone(), furMat);
+            frontRightLegPivot.add(fLegMeshR, fPawMeshR);
+            rabbitRunGroup.add(frontRightLegPivot);
+
+            // 5. Hind Legs (Thigh Haunches & Paws)
+            const thighGeo = new THREE.SphereGeometry(6.2, 14, 12);
+            thighGeo.scale(1.25, 0.75, 1.1);
+            thighGeo.translate(0, 0, -2);
+
+            const bPawGeo = new THREE.CylinderGeometry(2.1, 1.6, 11, 10);
+            bPawGeo.rotateX(Math.PI / 2);
+            bPawGeo.translate(2.2, 0, -8.5);
+            bPawGeo.scale(0.8, 0.5, 1.0);
+
+            backLeftLegPivot = new THREE.Group();
+            backLeftLegPivot.position.set(-7.5, 8.0, 11.5);
+            const thighMeshL = new THREE.Mesh(thighGeo, furMat);
+            const bPawMeshL = new THREE.Mesh(bPawGeo, furMat);
+            backLeftLegPivot.add(thighMeshL, bPawMeshL);
+            rabbitRunGroup.add(backLeftLegPivot);
+
+            backRightLegPivot = new THREE.Group();
+            backRightLegPivot.position.set(-7.5, -8.0, 11.5);
+            const thighMeshR = new THREE.Mesh(thighGeo.clone(), furMat);
+            const bPawMeshR = new THREE.Mesh(bPawGeo.clone(), furMat);
+            backRightLegPivot.add(thighMeshR, bPawMeshR);
+            rabbitRunGroup.add(backRightLegPivot);
+
+            // 6. Fluffy Tail
+            const tailGeo = new THREE.SphereGeometry(4.0, 14, 12);
+            tailMesh = new THREE.Mesh(tailGeo, tailMat);
+            tailMesh.position.set(-15, 0, 12.5);
+            rabbitRunGroup.add(tailMesh);
+
+            // Initial position & heading
+            updateRabbitPosition(0);
+
+            // Event Listeners for Raycasting Hit Detection
+            window.addEventListener('pointerdown', onRabbitPointerDown, { capture: true });
+            window.addEventListener('click', onRabbitClick, { capture: true });
+            window.addEventListener('pointermove', onRabbitPointerMove, { passive: true });
+            window.addEventListener('resize', onRabbitResize);
+
+            // Start animation loop
+            animateRabbit();
+        }
+
+        function projectScreenToGround(screenX, screenY, targetVec) {
+            const ndcX = (screenX / window.innerWidth) * 2 - 1;
+            const ndcY = -(screenY / window.innerHeight) * 2 + 1;
+            rabbitRaycaster.setFromCamera({ x: ndcX, y: ndcY }, rabbitCamera);
+            rabbitRaycaster.ray.intersectPlane(groundPlane, targetVec);
+            return targetVec;
+        }
+
+        function updateRabbitPosition(dt) {
+            const MARGIN = 65;
+            const PADDING = 140;
+
+            // Anticipate screen boundaries and steer towards screen interior
+            let steerDirX = 0;
+            let steerDirY = 0;
+            if (rabbitState.screenX < PADDING) steerDirX += 1;
+            else if (rabbitState.screenX > window.innerWidth - PADDING) steerDirX -= 1;
+            if (rabbitState.screenY < PADDING) steerDirY += 1;
+            else if (rabbitState.screenY > window.innerHeight - PADDING) steerDirY -= 1;
+
+            if (steerDirX !== 0 || steerDirY !== 0) {
+                rabbitState.targetHeading = Math.atan2(steerDirY, steerDirX) + (Math.random() - 0.5) * 0.4;
+            } else {
+                rabbitState.changeTimer -= dt;
+                if (rabbitState.changeTimer <= 0) {
+                    rabbitState.changeTimer = 2.2 + Math.random() * 2.8;
+                    const tx = MARGIN * 1.5 + Math.random() * (window.innerWidth - MARGIN * 3);
+                    const ty = MARGIN * 1.5 + Math.random() * (window.innerHeight - MARGIN * 3);
+                    rabbitState.targetHeading = Math.atan2(ty - rabbitState.screenY, tx - rabbitState.screenX);
+                }
+            }
+
+            // Smooth angular transition towards target heading
+            let dAngle = rabbitState.targetHeading - rabbitState.heading;
+            dAngle = Math.atan2(Math.sin(dAngle), Math.cos(dAngle));
+            const maxTurn = rabbitState.turnSpeed * dt;
+            if (Math.abs(dAngle) <= maxTurn) {
+                rabbitState.heading = rabbitState.targetHeading;
+            } else {
+                rabbitState.heading += Math.sign(dAngle) * maxTurn;
+            }
+            rabbitState.heading = Math.atan2(Math.sin(rabbitState.heading), Math.cos(rabbitState.heading));
+
+            // Move forward
+            rabbitState.screenX += Math.cos(rabbitState.heading) * rabbitState.speed * dt;
+            rabbitState.screenY += Math.sin(rabbitState.heading) * rabbitState.speed * dt;
+
+            // Strict boundary clamping so the rabbit never leaves the screen bounds
+            rabbitState.screenX = Math.max(MARGIN, Math.min(window.innerWidth - MARGIN, rabbitState.screenX));
+            rabbitState.screenY = Math.max(MARGIN, Math.min(window.innerHeight - MARGIN, rabbitState.screenY));
+
+            // Map 2D screen coordinates to 3D ground plane
+            projectScreenToGround(rabbitState.screenX, rabbitState.screenY, rabbitRootGroup.position);
+
+            // Compute 3D heading orientation facing the forward motion direction
+            const aheadScreenX = rabbitState.screenX + Math.cos(rabbitState.heading) * 15;
+            const aheadScreenY = rabbitState.screenY + Math.sin(rabbitState.heading) * 15;
+            const aheadWorld = new THREE.Vector3();
+            projectScreenToGround(aheadScreenX, aheadScreenY, aheadWorld);
+
+            const travelDir = aheadWorld.sub(rabbitRootGroup.position);
+            if (travelDir.lengthSq() > 0.0001) {
+                rabbitYawGroup.rotation.z = Math.atan2(travelDir.y, travelDir.x);
+            }
+        }
+
+        function updateRabbitAnim(dt) {
+            rabbitState.runCycle += dt * 11;
+            const rc = rabbitState.runCycle;
+
+            if (!rabbitState.isJumping) {
+                // Running hop motion
+                rabbitRunGroup.position.z = Math.abs(Math.sin(rc)) * 3.5;
+                rabbitRunGroup.rotation.y = Math.sin(rc) * 0.08;
+
+                // Alternating / synchronized leg swings
+                frontLeftLegPivot.rotation.y = Math.sin(rc) * 0.55;
+                frontRightLegPivot.rotation.y = Math.sin(rc + 0.35) * 0.55;
+                backLeftLegPivot.rotation.y = -Math.sin(rc) * 0.65;
+                backRightLegPivot.rotation.y = -Math.sin(rc) * 0.65;
+
+                // Ears soft reactive bobbing
+                leftEarPivot.rotation.y = -0.2 + Math.sin(rc - 0.4) * 0.12;
+                rightEarPivot.rotation.y = -0.2 + Math.sin(rc - 0.6) * 0.12;
+
+                // Tail happy twitch
+                tailMesh.rotation.z = Math.sin(rc * 2) * 0.22;
+
+                // Landing squash recovery
+                if (rabbitState.squashTimer > 0) {
+                    rabbitState.squashTimer -= dt;
+                    const sq = Math.max(0, rabbitState.squashTimer / 0.12);
+                    rabbitRunGroup.scale.set(1 + sq * 0.2, 1 + sq * 0.2, 1 - sq * 0.28);
+                } else {
+                    rabbitRunGroup.scale.set(1, 1, 1);
+                }
+            } else {
+                // Jump on click: natural parabolic arc & binky flourish
+                rabbitState.jumpTimer += dt;
+                const p = Math.min(1, rabbitState.jumpTimer / rabbitState.jumpDuration);
+
+                // Natural arc: reaches peak height at middle, returns to 0
+                const alt = rabbitState.jumpPeak * 4 * p * (1 - p);
+                rabbitJumpGroup.position.z = alt;
+
+                // Binky acrobatics
+                const binky = Math.sin(p * Math.PI);
+                rabbitJumpGroup.rotation.x = binky * 0.42;
+                rabbitJumpGroup.rotation.y = Math.sin(p * Math.PI * 2) * 0.22;
+
+                // Extended leap posture
+                frontLeftLegPivot.rotation.y = -0.65 * binky;
+                frontRightLegPivot.rotation.y = -0.65 * binky;
+                backLeftLegPivot.rotation.y = 0.75 * binky;
+                backRightLegPivot.rotation.y = 0.75 * binky;
+
+                leftEarPivot.rotation.y = -0.45 + binky * 0.25;
+                rightEarPivot.rotation.y = -0.45 + binky * 0.25;
+
+                tailMesh.rotation.z = Math.sin(p * Math.PI * 6) * 0.35;
+
+                if (p >= 1) {
+                    rabbitState.isJumping = false;
+                    rabbitJumpGroup.position.z = 0;
+                    rabbitJumpGroup.rotation.x = 0;
+                    rabbitJumpGroup.rotation.y = 0;
+                    rabbitState.squashTimer = 0.12; // trigger squash on landing
+                }
+            }
+        }
+
+        function triggerRabbitJump() {
+            rabbitState.isJumping = true;
+            rabbitState.jumpTimer = 0;
+            rabbitState.changeTimer = Math.max(rabbitState.changeTimer, rabbitState.jumpDuration + 1.0);
+        }
+
+        function checkRabbitModelHit(clientX, clientY) {
+            if (!rabbitCamera || !rabbitRootGroup) return false;
+            rabbitMouseNDC.x = (clientX / window.innerWidth) * 2 - 1;
+            rabbitMouseNDC.y = -(clientY / window.innerHeight) * 2 + 1;
+            rabbitRaycaster.setFromCamera(rabbitMouseNDC, rabbitCamera);
+            // Raycast strictly against the 3D meshes of the model (recursive)
+            const hits = rabbitRaycaster.intersectObject(rabbitRootGroup, true);
+            return hits.length > 0;
+        }
+
+        function onRabbitPointerDown(e) {
+            if (e.button !== undefined && e.button !== 0) return;
+            const cx = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : undefined);
+            const cy = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : undefined);
+            if (cx === undefined || cy === undefined) return;
+
+            if (checkRabbitModelHit(cx, cy)) {
+                // Intercept click: perform jump and prevent slide navigation or content activation
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                triggerRabbitJump();
+                return false;
+            }
+        }
+
+        function onRabbitClick(e) {
+            if (checkRabbitModelHit(e.clientX, e.clientY)) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+            }
+        }
+
+        function onRabbitPointerMove(e) {
+            if (checkRabbitModelHit(e.clientX, e.clientY)) {
+                document.body.style.cursor = 'pointer';
+            } else if (document.body.style.cursor === 'pointer') {
+                document.body.style.cursor = '';
+            }
+        }
+
+        function onRabbitResize() {
+            if (!rabbitCamera || !rabbitRenderer) return;
+            rabbitCamera.aspect = window.innerWidth / window.innerHeight;
+            rabbitCamera.updateProjectionMatrix();
+            rabbitRenderer.setSize(window.innerWidth, window.innerHeight);
+
+            const MARGIN = 65;
+            rabbitState.screenX = Math.max(MARGIN, Math.min(window.innerWidth - MARGIN, rabbitState.screenX));
+            rabbitState.screenY = Math.max(MARGIN, Math.min(window.innerHeight - MARGIN, rabbitState.screenY));
+        }
+
+        function animateRabbit() {
+            requestAnimationFrame(animateRabbit);
+            const dt = Math.min(rabbitClock.getDelta(), 0.1);
+            updateRabbitPosition(dt);
+            updateRabbitAnim(dt);
+            rabbitRenderer.render(rabbitScene, rabbitCamera);
+        }
     </script>
-<style>#rabbit{position:fixed;bottom:30px;right:-150px;font-size:5rem;z-index:9999;pointer-events:none;}</style><div id="rabbit">🐇</div><script>function jump(){let r=document.getElementById("rabbit");if(r){r.style.transition="none";r.style.right="-150px";setTimeout(()=>{r.style.transition="right 3.5s ease-in-out";r.style.right="110vw";},50);}} document.addEventListener("click",jump); document.addEventListener("keydown",(e)=>{if(["ArrowRight","ArrowLeft","Space","ArrowUp","ArrowDown","PageDown","PageUp"].includes(e.code))jump();});</script></body>
+</body>
 </html>
 
